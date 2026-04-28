@@ -1,0 +1,16 @@
+{
+	"mcpServers": {
+		"filesystem": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-filesystem",
+				"/Users/punee/AndroidStudioProjects/RaithaBharosaHub"
+			],
+			"alwaysAllow": [
+				"read_text_file",
+				"edit_file"
+			]
+		}
+	}
+}

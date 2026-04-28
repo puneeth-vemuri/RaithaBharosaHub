@@ -1,0 +1,204 @@
+2026-04-28 20:48:24.387 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "list")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.391 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "city")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.394 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "dt")
+    ^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.395 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "dt_txt")
+    ^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.396 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "main")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.397 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "rain")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.398 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "weather")
+    ^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.399 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "pop")
+    ^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.399 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "temp")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.400 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "temp_min")
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.401 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "temp_max")
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.402 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "humidity")
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.402 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "pressure")
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.402 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "3h")
+    ^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.403 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "id")
+    ^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.404 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "main")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.405 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "description")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.406 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "icon")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.407 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "id")
+    ^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.407 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "name")
+    ^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.408 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "coord")
+    ^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.408 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "country")
+    ^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.409 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "timezone")
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.409 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "lat")
+    ^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.410 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to property.
+- To opt in to applying to both value parameter and property, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @Json(name = "lon")
+    ^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.411 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @ApplicationContext private val context: Context,
+    ^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.412 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @ApplicationContext private val context: Context
+    ^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.413 [daemon] INFO: Message: warning: this annotation is currently applied to the value parameter only, but in the future it will also be applied to field.
+- To opt in to applying to both value parameter and field, add '-Xannotation-default-target=param-property' to your compiler arguments.
+- To keep applying to the value parameter only, use the '@param:' annotation target.
+
+See https://youtrack.jetbrains.com/issue/KT-73255 for more details.
+    @ApplicationContext private val context: Context
+    ^^^^^^^^^^^^^^^^^^^
+2026-04-28 20:48:24.414 [daemon] INFO: Message: warning: 'val Icons.Filled.ArrowBack: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowBack.
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                                           ^^^^^^^^^
+2026-04-28 20:48:24.415 [daemon] INFO: Message: warning: 'fun Divider(modifier: Modifier = ..., thickness: Dp = ..., color: Color = ...): Unit' is deprecated. Renamed to HorizontalDivider.
+                        Divider(modifier = Modifier.padding(vertical = 8.dp))
+                        ^^^^^^^
+2026-04-28 20:48:25.670 [compiler] INFO: Done with result 0
+2026-04-28 20:48:25.687 [compiler] INFO: cleaning after session 44

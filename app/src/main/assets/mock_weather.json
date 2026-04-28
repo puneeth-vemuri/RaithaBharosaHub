@@ -1,0 +1,1205 @@
+{
+  "cod": "200",
+  "message": 0,
+  "cnt": 56,
+  "list": [
+    {
+      "dt": 1709251200,
+      "dt_txt": "2024-03-01 00:00:00",
+      "main": {
+        "temp": 28.5,
+        "temp_min": 26.0,
+        "temp_max": 28.5,
+        "pressure": 1012,
+        "humidity": 65
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709262000,
+      "dt_txt": "2024-03-01 03:00:00",
+      "main": {
+        "temp": 27.2,
+        "temp_min": 25.5,
+        "temp_max": 27.2,
+        "pressure": 1012,
+        "humidity": 68
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709272800,
+      "dt_txt": "2024-03-01 06:00:00",
+      "main": {
+        "temp": 26.8,
+        "temp_min": 24.0,
+        "temp_max": 26.8,
+        "pressure": 1013,
+        "humidity": 72
+      },
+      "weather": [
+        {
+          "id": 802,
+          "main": "Clouds",
+          "description": "scattered clouds",
+          "icon": "03n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.1
+    },
+    {
+      "dt": 1709283600,
+      "dt_txt": "2024-03-01 09:00:00",
+      "main": {
+        "temp": 29.1,
+        "temp_min": 26.5,
+        "temp_max": 29.1,
+        "pressure": 1013,
+        "humidity": 60
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709294400,
+      "dt_txt": "2024-03-01 12:00:00",
+      "main": {
+        "temp": 31.5,
+        "temp_min": 29.0,
+        "temp_max": 31.5,
+        "pressure": 1011,
+        "humidity": 52
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709305200,
+      "dt_txt": "2024-03-01 15:00:00",
+      "main": {
+        "temp": 32.3,
+        "temp_min": 30.0,
+        "temp_max": 32.3,
+        "pressure": 1010,
+        "humidity": 48
+      },
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "rain": {
+        "3h": 2.5
+      },
+      "pop": 0.3
+    },
+    {
+      "dt": 1709316000,
+      "dt_txt": "2024-03-01 18:00:00",
+      "main": {
+        "temp": 30.1,
+        "temp_min": 28.0,
+        "temp_max": 30.1,
+        "pressure": 1011,
+        "humidity": 55
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.1
+    },
+    {
+      "dt": 1709326800,
+      "dt_txt": "2024-03-01 21:00:00",
+      "main": {
+        "temp": 27.9,
+        "temp_min": 25.5,
+        "temp_max": 27.9,
+        "pressure": 1012,
+        "humidity": 65
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709337600,
+      "dt_txt": "2024-03-02 00:00:00",
+      "main": {
+        "temp": 26.5,
+        "temp_min": 24.0,
+        "temp_max": 26.5,
+        "pressure": 1012,
+        "humidity": 72
+      },
+      "weather": [
+        {
+          "id": 802,
+          "main": "Clouds",
+          "description": "scattered clouds",
+          "icon": "03n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.2
+    },
+    {
+      "dt": 1709348400,
+      "dt_txt": "2024-03-02 03:00:00",
+      "main": {
+        "temp": 25.2,
+        "temp_min": 22.5,
+        "temp_max": 25.2,
+        "pressure": 1013,
+        "humidity": 78
+      },
+      "weather": [
+        {
+          "id": 803,
+          "main": "Clouds",
+          "description": "broken clouds",
+          "icon": "04n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.3
+    },
+    {
+      "dt": 1709359200,
+      "dt_txt": "2024-03-02 06:00:00",
+      "main": {
+        "temp": 24.8,
+        "temp_min": 22.0,
+        "temp_max": 24.8,
+        "pressure": 1014,
+        "humidity": 82
+      },
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10n"
+        }
+      ],
+      "rain": {
+        "3h": 1.8
+      },
+      "pop": 0.4
+    },
+    {
+      "dt": 1709370000,
+      "dt_txt": "2024-03-02 09:00:00",
+      "main": {
+        "temp": 26.1,
+        "temp_min": 23.5,
+        "temp_max": 26.1,
+        "pressure": 1014,
+        "humidity": 75
+      },
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "rain": {
+        "3h": 3.2
+      },
+      "pop": 0.5
+    },
+    {
+      "dt": 1709380800,
+      "dt_txt": "2024-03-02 12:00:00",
+      "main": {
+        "temp": 28.3,
+        "temp_min": 25.5,
+        "temp_max": 28.3,
+        "pressure": 1013,
+        "humidity": 65
+      },
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "rain": {
+        "3h": 2.1
+      },
+      "pop": 0.4
+    },
+    {
+      "dt": 1709391600,
+      "dt_txt": "2024-03-02 15:00:00",
+      "main": {
+        "temp": 29.5,
+        "temp_min": 27.0,
+        "temp_max": 29.5,
+        "pressure": 1012,
+        "humidity": 58
+      },
+      "weather": [
+        {
+          "id": 511,
+          "main": "Rain",
+          "description": "freezing rain",
+          "icon": "13d"
+        }
+      ],
+      "rain": {
+        "3h": 5.5
+      },
+      "pop": 0.8
+    },
+    {
+      "dt": 1709402400,
+      "dt_txt": "2024-03-02 18:00:00",
+      "main": {
+        "temp": 28.2,
+        "temp_min": 26.0,
+        "temp_max": 28.2,
+        "pressure": 1013,
+        "humidity": 62
+      },
+      "weather": [
+        {
+          "id": 500,
+          "main": "Rain",
+          "description": "light rain",
+          "icon": "10d"
+        }
+      ],
+      "rain": {
+        "3h": 2.8
+      },
+      "pop": 0.6
+    },
+    {
+      "dt": 1709413200,
+      "dt_txt": "2024-03-02 21:00:00",
+      "main": {
+        "temp": 26.3,
+        "temp_min": 24.0,
+        "temp_max": 26.3,
+        "pressure": 1013,
+        "humidity": 70
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.2
+    },
+    {
+      "dt": 1709424000,
+      "dt_txt": "2024-03-03 00:00:00",
+      "main": {
+        "temp": 25.1,
+        "temp_min": 22.5,
+        "temp_max": 25.1,
+        "pressure": 1014,
+        "humidity": 78
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709434800,
+      "dt_txt": "2024-03-03 03:00:00",
+      "main": {
+        "temp": 24.2,
+        "temp_min": 21.5,
+        "temp_max": 24.2,
+        "pressure": 1015,
+        "humidity": 85
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709445600,
+      "dt_txt": "2024-03-03 06:00:00",
+      "main": {
+        "temp": 23.8,
+        "temp_min": 20.5,
+        "temp_max": 23.8,
+        "pressure": 1015,
+        "humidity": 88
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709456400,
+      "dt_txt": "2024-03-03 09:00:00",
+      "main": {
+        "temp": 25.5,
+        "temp_min": 22.5,
+        "temp_max": 25.5,
+        "pressure": 1015,
+        "humidity": 80
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709467200,
+      "dt_txt": "2024-03-03 12:00:00",
+      "main": {
+        "temp": 27.9,
+        "temp_min": 25.0,
+        "temp_max": 27.9,
+        "pressure": 1014,
+        "humidity": 70
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709478000,
+      "dt_txt": "2024-03-03 15:00:00",
+      "main": {
+        "temp": 29.1,
+        "temp_min": 26.5,
+        "temp_max": 29.1,
+        "pressure": 1013,
+        "humidity": 62
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709488800,
+      "dt_txt": "2024-03-03 18:00:00",
+      "main": {
+        "temp": 28.5,
+        "temp_min": 26.0,
+        "temp_max": 28.5,
+        "pressure": 1013,
+        "humidity": 68
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709499600,
+      "dt_txt": "2024-03-03 21:00:00",
+      "main": {
+        "temp": 26.8,
+        "temp_min": 24.5,
+        "temp_max": 26.8,
+        "pressure": 1014,
+        "humidity": 75
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709510400,
+      "dt_txt": "2024-03-04 00:00:00",
+      "main": {
+        "temp": 25.6,
+        "temp_min": 23.0,
+        "temp_max": 25.6,
+        "pressure": 1014,
+        "humidity": 82
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709521200,
+      "dt_txt": "2024-03-04 03:00:00",
+      "main": {
+        "temp": 24.3,
+        "temp_min": 21.5,
+        "temp_max": 24.3,
+        "pressure": 1015,
+        "humidity": 85
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.1
+    },
+    {
+      "dt": 1709532000,
+      "dt_txt": "2024-03-04 06:00:00",
+      "main": {
+        "temp": 23.9,
+        "temp_min": 21.0,
+        "temp_max": 23.9,
+        "pressure": 1015,
+        "humidity": 88
+      },
+      "weather": [
+        {
+          "id": 802,
+          "main": "Clouds",
+          "description": "scattered clouds",
+          "icon": "03n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.15
+    },
+    {
+      "dt": 1709542800,
+      "dt_txt": "2024-03-04 09:00:00",
+      "main": {
+        "temp": 25.2,
+        "temp_min": 22.5,
+        "temp_max": 25.2,
+        "pressure": 1015,
+        "humidity": 82
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.1
+    },
+    {
+      "dt": 1709553600,
+      "dt_txt": "2024-03-04 12:00:00",
+      "main": {
+        "temp": 27.6,
+        "temp_min": 25.0,
+        "temp_max": 27.6,
+        "pressure": 1014,
+        "humidity": 72
+      },
+      "weather": [
+        {
+          "id": 801,
+          "main": "Clouds",
+          "description": "few clouds",
+          "icon": "02d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709564400,
+      "dt_txt": "2024-03-04 15:00:00",
+      "main": {
+        "temp": 28.9,
+        "temp_min": 26.5,
+        "temp_max": 28.9,
+        "pressure": 1013,
+        "humidity": 64
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709575200,
+      "dt_txt": "2024-03-04 18:00:00",
+      "main": {
+        "temp": 28.2,
+        "temp_min": 26.0,
+        "temp_max": 28.2,
+        "pressure": 1013,
+        "humidity": 70
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709586000,
+      "dt_txt": "2024-03-04 21:00:00",
+      "main": {
+        "temp": 26.5,
+        "temp_min": 24.0,
+        "temp_max": 26.5,
+        "pressure": 1014,
+        "humidity": 78
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709596800,
+      "dt_txt": "2024-03-05 00:00:00",
+      "main": {
+        "temp": 25.3,
+        "temp_min": 22.5,
+        "temp_max": 25.3,
+        "pressure": 1014,
+        "humidity": 85
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709607600,
+      "dt_txt": "2024-03-05 03:00:00",
+      "main": {
+        "temp": 24.1,
+        "temp_min": 21.5,
+        "temp_max": 24.1,
+        "pressure": 1015,
+        "humidity": 88
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709618400,
+      "dt_txt": "2024-03-05 06:00:00",
+      "main": {
+        "temp": 23.7,
+        "temp_min": 20.5,
+        "temp_max": 23.7,
+        "pressure": 1015,
+        "humidity": 90
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709629200,
+      "dt_txt": "2024-03-05 09:00:00",
+      "main": {
+        "temp": 25.4,
+        "temp_min": 22.5,
+        "temp_max": 25.4,
+        "pressure": 1015,
+        "humidity": 82
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709640000,
+      "dt_txt": "2024-03-05 12:00:00",
+      "main": {
+        "temp": 28.1,
+        "temp_min": 25.5,
+        "temp_max": 28.1,
+        "pressure": 1014,
+        "humidity": 70
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709650800,
+      "dt_txt": "2024-03-05 15:00:00",
+      "main": {
+        "temp": 29.3,
+        "temp_min": 27.0,
+        "temp_max": 29.3,
+        "pressure": 1013,
+        "humidity": 62
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709661600,
+      "dt_txt": "2024-03-05 18:00:00",
+      "main": {
+        "temp": 28.7,
+        "temp_min": 26.5,
+        "temp_max": 28.7,
+        "pressure": 1013,
+        "humidity": 68
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709672400,
+      "dt_txt": "2024-03-05 21:00:00",
+      "main": {
+        "temp": 27.0,
+        "temp_min": 24.5,
+        "temp_max": 27.0,
+        "pressure": 1014,
+        "humidity": 76
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709683200,
+      "dt_txt": "2024-03-06 00:00:00",
+      "main": {
+        "temp": 25.8,
+        "temp_min": 23.0,
+        "temp_max": 25.8,
+        "pressure": 1014,
+        "humidity": 83
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709694000,
+      "dt_txt": "2024-03-06 03:00:00",
+      "main": {
+        "temp": 24.5,
+        "temp_min": 21.5,
+        "temp_max": 24.5,
+        "pressure": 1015,
+        "humidity": 86
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709704800,
+      "dt_txt": "2024-03-06 06:00:00",
+      "main": {
+        "temp": 24.0,
+        "temp_min": 21.0,
+        "temp_max": 24.0,
+        "pressure": 1015,
+        "humidity": 89
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709715600,
+      "dt_txt": "2024-03-06 09:00:00",
+      "main": {
+        "temp": 25.6,
+        "temp_min": 22.5,
+        "temp_max": 25.6,
+        "pressure": 1015,
+        "humidity": 81
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709726400,
+      "dt_txt": "2024-03-06 12:00:00",
+      "main": {
+        "temp": 28.3,
+        "temp_min": 25.5,
+        "temp_max": 28.3,
+        "pressure": 1014,
+        "humidity": 71
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709737200,
+      "dt_txt": "2024-03-06 15:00:00",
+      "main": {
+        "temp": 29.5,
+        "temp_min": 27.0,
+        "temp_max": 29.5,
+        "pressure": 1013,
+        "humidity": 61
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709748000,
+      "dt_txt": "2024-03-06 18:00:00",
+      "main": {
+        "temp": 28.9,
+        "temp_min": 26.5,
+        "temp_max": 28.9,
+        "pressure": 1013,
+        "humidity": 67
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709758800,
+      "dt_txt": "2024-03-06 21:00:00",
+      "main": {
+        "temp": 27.2,
+        "temp_min": 24.5,
+        "temp_max": 27.2,
+        "pressure": 1014,
+        "humidity": 75
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709769600,
+      "dt_txt": "2024-03-07 00:00:00",
+      "main": {
+        "temp": 26.0,
+        "temp_min": 23.0,
+        "temp_max": 26.0,
+        "pressure": 1014,
+        "humidity": 82
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709780400,
+      "dt_txt": "2024-03-07 03:00:00",
+      "main": {
+        "temp": 24.7,
+        "temp_min": 21.5,
+        "temp_max": 24.7,
+        "pressure": 1015,
+        "humidity": 85
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709791200,
+      "dt_txt": "2024-03-07 06:00:00",
+      "main": {
+        "temp": 24.2,
+        "temp_min": 21.0,
+        "temp_max": 24.2,
+        "pressure": 1015,
+        "humidity": 88
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709802000,
+      "dt_txt": "2024-03-07 09:00:00",
+      "main": {
+        "temp": 25.8,
+        "temp_min": 22.5,
+        "temp_max": 25.8,
+        "pressure": 1015,
+        "humidity": 80
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709812800,
+      "dt_txt": "2024-03-07 12:00:00",
+      "main": {
+        "temp": 28.5,
+        "temp_min": 26.0,
+        "temp_max": 28.5,
+        "pressure": 1014,
+        "humidity": 69
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709823600,
+      "dt_txt": "2024-03-07 15:00:00",
+      "main": {
+        "temp": 29.7,
+        "temp_min": 27.5,
+        "temp_max": 29.7,
+        "pressure": 1013,
+        "humidity": 60
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709834400,
+      "dt_txt": "2024-03-07 18:00:00",
+      "main": {
+        "temp": 29.1,
+        "temp_min": 27.0,
+        "temp_max": 29.1,
+        "pressure": 1013,
+        "humidity": 66
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01d"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    },
+    {
+      "dt": 1709845200,
+      "dt_txt": "2024-03-07 21:00:00",
+      "main": {
+        "temp": 27.4,
+        "temp_min": 25.0,
+        "temp_max": 27.4,
+        "pressure": 1014,
+        "humidity": 74
+      },
+      "weather": [
+        {
+          "id": 800,
+          "main": "Clear",
+          "description": "clear sky",
+          "icon": "01n"
+        }
+      ],
+      "rain": {},
+      "pop": 0.0
+    }
+  ],
+  "city": {
+    "id": 1277333,
+    "name": "Bengaluru",
+    "coord": {
+      "lat": 12.9716,
+      "lon": 77.5946
+    },
+    "country": "IN",
+    "timezone": 19800
+  }
+}

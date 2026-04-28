@@ -1,0 +1,159 @@
+<resources>
+    <string name="app_name">RaithaBharosaHub</string>
+
+    <!-- Sowing Index Messages -->
+    <string name="sow_now">Sow Now</string>
+    <string name="caution_check_conditions">Caution — Check Conditions</string>
+    <string name="wait_conditions_poor">Wait — Conditions Not Ready</string>
+    <string name="soil_too_wet">Soil Too Wet — Wait for Drying</string>
+
+    <!-- Onboarding -->
+    <string name="logo_placeholder">Raitha Bharosa Hub</string>
+    <string name="select_language">Select Language</string>
+    <string name="language_english">English</string>
+    <string name="language_kannada">ಕನ್ನಡ</string>
+
+    <string name="farmer_profile_title">Farmer Profile</string>
+    <string name="full_name">Full Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="mobile_validation_error">Mobile number must be exactly 10 digits</string>
+    <string name="primary_crop">Primary Crop</string>
+    <string name="district">District</string>
+    <string name="select">Select</string>
+    <string name="next">Next</string>
+
+    <string name="crop_sugarcane">Sugarcane</string>
+    <string name="crop_ragi">Ragi</string>
+    <string name="crop_paddy">Paddy</string>
+    <string name="crop_custom">Custom</string>
+
+    <string name="district_bengaluru_urban">Bengaluru Urban</string>
+    <string name="district_bengaluru_rural">Bengaluru Rural</string>
+    <string name="district_mysuru">Mysuru</string>
+    <string name="district_belagavi">Belagavi</string>
+    <string name="district_kalaburagi">Kalaburagi</string>
+    <string name="district_davanagere">Davanagere</string>
+    <string name="district_ballari">Ballari</string>
+    <string name="district_tumakuru">Tumakuru</string>
+    <string name="district_shivamogga">Shivamogga</string>
+    <string name="district_hassan">Hassan</string>
+
+    <string name="plot_location_title">Pin Plot Location</string>
+    <string name="use_current_location">Use My Current Location</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="plot_label">Plot Label</string>
+    <string name="selected_coordinates">Selected Coordinates: %1$s, %2$s</string>
+    <string name="not_set">Not Set</string>
+
+    <string name="permissions_title">App Permissions</string>
+    <string name="permission_location_title">Location Access</string>
+    <string name="permission_location_desc">Needed to fetch local weather and support plot pinning.</string>
+    <string name="permission_internet_title">Internet Access</string>
+    <string name="permission_internet_desc">Needed for weather API sync and forecast updates.</string>
+    <string name="permission_notifications_title">Notifications</string>
+    <string name="permission_notifications_desc">Needed for timely weather and sowing alerts.</string>
+    <string name="request_permissions">Request Permissions</string>
+    <string name="limited_functionality_warning">Some permissions were denied. Limited functionality will apply.</string>
+    <string name="finish_onboarding">Finish Setup</string>
+
+    <string name="dashboard_stub_title">Dashboard (Coming Up Next)</string>
+
+    <!-- Dashboard Screen -->
+    <string name="dashboard_title">Raitha Bharosa Hub</string>
+    <string name="offline_mode">Offline Mode</string>
+    <string name="last_updated">Last updated: %s</string>
+    <string name="simulate_data">Simulate Data</string>
+    <string name="moisture_label">Soil Moisture</string>
+    <string name="temperature_label">Temperature</string>
+    <string name="humidity_label">Humidity</string>
+    <string name="rain_24h_label">Rain (24h)</string>
+    <string name="refresh">Refresh</string>
+    <string name="loading">Loading…</string>
+    <string name="score_label">Sowing Index</string>
+
+    <!-- NPK Input Centre -->
+    <string name="npk_title">NPK Input Centre</string>
+    <string name="enter_test_tab">Enter Test</string>
+    <string name="history_tab">History</string>
+    <string name="nitrogen_label">Nitrogen (N)</string>
+    <string name="phosphorus_label">Phosphorus (P)</string>
+    <string name="potassium_label">Potassium (K)</string>
+    <string name="kg_per_ha">kg/ha</string>
+    <string name="lab_name_label">Lab Name</string>
+    <string name="test_date_label">Test Date</string>
+    <string name="calculate_button">Calculate Recommendations</string>
+    <string name="save_button">Save to History</string>
+    <string name="no_history">No tests recorded yet</string>
+    <string name="nutrient_deficient">DEFICIENT</string>
+    <string name="nutrient_optimal">OPTIMAL</string>
+    <string name="nutrient_excess">EXCESS</string>
+    <string name="npk_nitrogen_deficient">Nitrogen %1$.0f%% below optimal — apply Urea before sowing</string>
+    <string name="npk_nitrogen_optimal">Nitrogen at optimal level — maintain current fertilization</string>
+    <string name="npk_nitrogen_excess">Nitrogen %1$.0f%% above optimal — reduce nitrogen application</string>
+    <string name="npk_phosphorus_deficient">Phosphorus %1$.0f%% below optimal — apply DAP or SSP</string>
+    <string name="npk_phosphorus_optimal">Phosphorus at optimal level — maintain current fertilization</string>
+    <string name="npk_phosphorus_excess">Phosphorus %1$.0f%% above optimal — reduce phosphorus application</string>
+    <string name="npk_potassium_deficient">Potassium %1$.0f%% below optimal — apply MOP or SOP</string>
+    <string name="npk_potassium_optimal">Potassium at optimal level — maintain current fertilization</string>
+    <string name="npk_potassium_excess">Potassium %1$.0f%% above optimal — reduce potassium application</string>
+
+    <!-- Krishi Calendar -->
+    <string name="calendar_title">7‑Day Krishi Calendar</string>
+    <string name="storm_warning_fertilize_today">⚠️ Storm warning tomorrow — fertilize today</string>
+    <string name="milestone_sow_day">🌱 Sow Day</string>
+    <string name="milestone_first_irrigation">💧 First Irrigation</string>
+    <string name="milestone_first_fertilization">🌿 First Fertilization</string>
+    <string name="day_detail_title">Day Details</string>
+    <string name="rain_mm_label">Rain</string>
+    <string name="temp_max_label">Max Temp</string>
+    <string name="recommended_action_label">Recommended Action</string>
+    <string name="no_weather_data">No weather data available</string>
+    <string name="storm_warning_label">Storm Warning</string>
+    <string name="crop_milestone_label">Crop Milestone</string>
+    <string name="sowing_index_label">Sowing Index</string>
+    
+    <!-- Day names -->
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    <string name="day_sun">Sun</string>
+    
+    <!-- Sowing state labels -->
+    <string name="sowing_state_good">Good for Sowing</string>
+    <string name="sowing_state_moderate">Moderate Conditions</string>
+    <string name="sowing_state_poor">Poor Conditions</string>
+    
+    <!-- Recommended actions -->
+    <string name="recommended_action_sow">Ideal sowing day — proceed with sowing</string>
+    <string name="recommended_action_wait">Moderate conditions — wait for better weather</string>
+    <string name="recommended_action_delay">Poor conditions — delay sowing</string>
+    
+    <!-- Season History -->
+    <string name="season_history_title">Season History</string>
+    <string name="filter_by_crop">Filter by Crop:</string>
+    <string name="all_crops">All</string>
+    <string name="add_new_season">Add New Season</string>
+    <string name="save_season">Save Season</string>
+    <string name="total_seasons">Total Seasons</string>
+    <string name="completed">Completed</string>
+    <string name="avg_yield_kg">Avg Yield (kg)</string>
+    <string name="season_history">Season History</string>
+    <string name="no_season_history">No Season History</string>
+    <string name="add_first_season">Add your first cropping season to track yield and progress</string>
+    <string name="sown">Sown:</string>
+    <string name="harvested">Harvested:</string>
+    <string name="ongoing">Ongoing</string>
+    <string name="yield">Yield</string>
+    <string name="crop_hint">Crop (e.g., Paddy, Ragi)</string>
+    <string name="sow_date_hint">Sow Date (timestamp)</string>
+    <string name="harvest_date_hint">Harvest Date (optional)</string>
+    <string name="yield_hint">Yield (kg, optional)</string>
+    <string name="notes_hint">Notes (optional)</string>
+    <string name="validation_crop_required">Crop is required</string>
+    <string name="validation_sow_date_required">Sowing date is required</string>
+    <string name="delete">Delete</string>
+</resources>

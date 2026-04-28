@@ -1,0 +1,22 @@
+# Secrets — NEVER commit these
+local.properties
+*.jks
+*.keystore
+
+# Build outputs
+build/
+.gradle/
+app/build/
+
+# IDE
+.idea/
+*.iml
+
+# Room schema (optional — commit if you want migration history)
+# app/schemas/
+
+# OS
+.DS_Store
+/captures
+.externalNativeBuild
+.cxx
