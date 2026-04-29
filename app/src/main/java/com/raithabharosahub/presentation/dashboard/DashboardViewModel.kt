@@ -56,14 +56,9 @@ class DashboardViewModel @Inject constructor(
             val dataStore = context.dataStore
             val prefs = dataStore.data.first()
             val plotId = prefs[plotIdKey]?.toLongOrNull() ?: 1L
-            val lat = prefs[latitudeKey]?.toDoubleOrNull() ?: 12.9716
-            val lon = prefs[longitudeKey]?.toDoubleOrNull() ?: 77.5946
 
             // Start observing weather for this plot
             observeWeatherAndCalculateIndex(plotId)
-            
-            // If no weather data exists, generate simulated data
-            checkAndGenerateSimulatedData(plotId)
         }
     }
 
@@ -201,13 +196,4 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-    private fun checkAndGenerateSimulatedData(plotId: Long) {
-        viewModelScope.launch {
-            val weatherList = getWeatherForecastUseCase(plotId).first()
-            if (weatherList.isEmpty()) {
-                // Auto-generate simulated data when no data exists
-                generateSimulatedData()
-            }
-        }
-    }
 }

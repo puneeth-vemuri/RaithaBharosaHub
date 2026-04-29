@@ -1,6 +1,5 @@
 package com.raithabharosahub.presentation.onboarding.screens
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,12 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.raithabharosahub.R
 import com.raithabharosahub.presentation.onboarding.OnboardingViewModel
+import com.raithabharosahub.util.findActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FarmerProfileScreen(
     onNext: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current.findActivity())
 ) {
     var name by rememberSaveable { mutableStateOf("") }
     var mobile by rememberSaveable { mutableStateOf("") }

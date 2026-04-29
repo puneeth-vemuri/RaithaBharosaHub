@@ -2,7 +2,6 @@ package com.raithabharosahub.presentation.onboarding.screens
 
 import android.Manifest
 import android.os.Build
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -29,11 +28,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.raithabharosahub.R
 import com.raithabharosahub.presentation.onboarding.OnboardingViewModel
+import com.raithabharosahub.util.findActivity
 
 @Composable
 fun PermissionsScreen(
     onFinish: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current.findActivity())
 ) {
     var deniedCount by remember { mutableStateOf(0) }
 

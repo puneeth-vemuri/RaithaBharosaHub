@@ -243,7 +243,7 @@ private fun EnterTestTab(
         if (uiState.recommendations.isNotEmpty()) {
             item {
                 Text(
-                    text = "Recommendations",
+                    text = stringResource(R.string.recommendations_title),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -274,7 +274,7 @@ private fun EnterTestTab(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "NPK test saved successfully!",
+                        text = stringResource(R.string.npk_test_saved),
                         modifier = Modifier.padding(16.dp)
                     )
                 }
@@ -295,14 +295,14 @@ private fun EnterTestTab(
                         showDatePicker = false
                     }
                 ) {
-                    Text("OK")
+                    Text(stringResource(R.string.ok))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { showDatePicker = false }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.cancel_button))
                 }
             }
         ) {
@@ -368,7 +368,7 @@ private fun RecommendationCard(
             )
             
             Text(
-                text = "Deviation: ${String.format("%.1f", recommendation.deviation)}%",
+                text = stringResource(R.string.deviation_format, recommendation.deviation),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -458,9 +458,9 @@ private fun HistoryItem(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                NutrientDisplay("N", npkEntity.nitrogen)
-                NutrientDisplay("P", npkEntity.phosphorus)
-                NutrientDisplay("K", npkEntity.potassium)
+                NutrientDisplay(stringResource(R.string.nutrient_n), npkEntity.nitrogen)
+                NutrientDisplay(stringResource(R.string.nutrient_p), npkEntity.phosphorus)
+                NutrientDisplay(stringResource(R.string.nutrient_k), npkEntity.potassium)
             }
         }
     }

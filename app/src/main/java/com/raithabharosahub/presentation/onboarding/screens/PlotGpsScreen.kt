@@ -1,9 +1,7 @@
 package com.raithabharosahub.presentation.onboarding.screens
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,12 +26,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.location.LocationServices
 import com.raithabharosahub.R
 import com.raithabharosahub.presentation.onboarding.OnboardingViewModel
+import com.raithabharosahub.util.findActivity
 
-@SuppressLint("MissingPermission")
 @Composable
 fun PlotGpsScreen(
     onNext: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current.findActivity())
 ) {
     val context = LocalContext.current
     val fusedClient = LocationServices.getFusedLocationProviderClient(context)

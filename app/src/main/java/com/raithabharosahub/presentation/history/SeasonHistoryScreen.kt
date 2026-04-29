@@ -85,9 +85,10 @@ fun SeasonHistoryScreen(
     }
 
     // Show success snackbar
+    val successMessage = stringResource(R.string.season_saved_success)
     LaunchedEffect(uiState.isSaved) {
         if (uiState.isSaved) {
-            snackbarHostState.showSnackbar("Season saved successfully")
+            snackbarHostState.showSnackbar(successMessage)
         }
     }
 
@@ -97,12 +98,12 @@ fun SeasonHistoryScreen(
                 title = { Text(stringResource(R.string.season_history_title)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { /* TODO: Show filter dialog */ }) {
-                        Icon(Icons.Default.FilterList, contentDescription = "Filter")
+                        Icon(Icons.Default.FilterList, contentDescription = stringResource(R.string.content_desc_filter))
                     }
                 }
             )
@@ -114,7 +115,7 @@ fun SeasonHistoryScreen(
             ) {
                 Icon(
                     imageVector = if (uiState.isAddingNew) Icons.Default.Cancel else Icons.Default.Add,
-                    contentDescription = if (uiState.isAddingNew) "Cancel" else "Add Season"
+                    contentDescription = if (uiState.isAddingNew) stringResource(R.string.content_desc_cancel) else stringResource(R.string.content_desc_add_season)
                 )
             }
         },
@@ -137,7 +138,7 @@ fun SeasonHistoryScreen(
                     val crops = uiState.seasons.map { it.crop }.distinct()
                     if (crops.isNotEmpty()) {
                         Text(
-                            text = "Filter by Crop:",
+                            text = stringResource(R.string.filter_by_crop),
                             style = MaterialTheme.typography.titleSmall,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
@@ -148,7 +149,7 @@ fun SeasonHistoryScreen(
                             FilterChip(
                                 selected = uiState.selectedCropFilter == null,
                                 onClick = { viewModel.selectFilter(null) },
-                                label = { Text("All") },
+                                label = { Text(stringResource(R.string.all_crops)) },
                                 colors = FilterChipDefaults.filterChipColors(
                                     selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
                                 )
@@ -187,7 +188,7 @@ fun SeasonHistoryScreen(
                         EmptyState()
                     } else {
                         Text(
-                            text = "Season History (${uiState.seasons.size})",
+                            text = stringResource(R.string.season_history_count, uiState.seasons.size),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(bottom = 8.dp)
@@ -227,7 +228,7 @@ private fun AddSeasonForm(
             modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "Add New Season",
+                text = stringResource(R.string.add_new_season),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 12.dp)

@@ -175,4 +175,23 @@
     <string name="language_kannada_display">ಕನ್ನಡ (Kannada)</string>
     <string name="settings_version_value">ರೈತ ಭರೋಸಾ ಹಬ್ v%1$s</string>
     <string name="settings_credit_value">ಮೈಂಡ್‌ಮ್ಯಾಟ್ರಿಕ್ಸ್ VTU ಇಂಟರ್ನ್‌ಶಿಪ್ — ಪುನೀತ್ ವೆಮುರಿ</string>
+
+    <!-- Additional strings for Season History and NPK -->
+    <string name="season_saved_success">ಸೀಸನ್ ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ</string>
+    <string name="content_desc_filter">ಬೆಳೆಯಿಂದ ಫಿಲ್ಟರ್ ಮಾಡಿ</string>
+    <string name="content_desc_cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="content_desc_add_season">ಹೊಸ ಸೀಸನ್ ಸೇರಿಸಿ</string>
+    <string name="season_history_count">%1$d ಸೀಸನ್‌ಗಳು</string>
+    <string name="plot_number">ಕೃಷಿಭೂಮಿ #%1$d</string>
+    <string name="never">ಎಂದಿಗೂ</string>
+    <string name="ok">ಸರಿ</string>
+    <string name="cancel_button">ರದ್ದುಮಾಡಿ</string>
+    <string name="recommendations_title">ಶಿಫಾರಸುಗಳು</string>
+    <string name="npk_test_saved">NPK ಪರೀಕ್ಷೆ ಉಳಿಸಲಾಗಿದೆ</string>
+    <string name="deviation_format">%1$.0f%% ಸೂಕ್ತಕ್ಕಿಂತ %2$s</string>
+    <string name="validation_must_be_between">%1$s %2$d ಮತ್ತು %3$d ಕೆಜಿ/ಹೆ ನಡುವೆ ಇರಬೇಕು</string>
+    <string name="validation_lab_name_empty">ಲ್ಯಾಬ್ ಹೆಸರು ಅಗತ್ಯವಿದೆ</string>
+    <string name="nutrient_n">N</string>
+    <string name="nutrient_p">P</string>
+    <string name="nutrient_k">K</string>
 </resources>

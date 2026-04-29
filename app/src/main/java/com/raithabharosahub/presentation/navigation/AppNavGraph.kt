@@ -1,6 +1,5 @@
 package com.raithabharosahub.presentation.navigation
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,6 +50,7 @@ import com.raithabharosahub.presentation.onboarding.screens.LanguagePickerScreen
 import com.raithabharosahub.presentation.onboarding.screens.PermissionsScreen
 import com.raithabharosahub.presentation.onboarding.screens.PlotGpsScreen
 import com.raithabharosahub.presentation.settings.SettingsScreen
+import com.raithabharosahub.util.findActivity
 
 object AppRoutes {
     const val OnboardingLanguage = "onboarding_language"
@@ -67,7 +67,7 @@ object AppRoutes {
 @Composable
 fun AppNavGraph(
     navController: NavHostController = rememberNavController(),
-    onboardingViewModel: OnboardingViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+    onboardingViewModel: OnboardingViewModel = hiltViewModel(LocalContext.current.findActivity())
 ) {
     val state by onboardingViewModel.uiState.collectAsState()
 
@@ -190,7 +190,7 @@ fun AppNavGraph(
             }
 
             composable(AppRoutes.Dashboard) {
-                val dashboardViewModel: DashboardViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+                val dashboardViewModel: DashboardViewModel = hiltViewModel(LocalContext.current.findActivity())
                 DashboardScreen(
                     viewModel = dashboardViewModel,
                     onSettingsClick = {
@@ -200,21 +200,21 @@ fun AppNavGraph(
             }
 
             composable(AppRoutes.NpkCentre) {
-                val npkViewModel: NpkViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+                val npkViewModel: NpkViewModel = hiltViewModel(LocalContext.current.findActivity())
                 NpkScreen(
                     viewModel = npkViewModel
                 )
             }
 
             composable(AppRoutes.KrishiCalendar) {
-                val calendarViewModel: KrishiCalendarViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+                val calendarViewModel: KrishiCalendarViewModel = hiltViewModel(LocalContext.current.findActivity())
                 KrishiCalendarScreen(
                     viewModel = calendarViewModel
                 )
             }
 
             composable(AppRoutes.SeasonHistory) {
-                val historyViewModel: SeasonHistoryViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+                val historyViewModel: SeasonHistoryViewModel = hiltViewModel(LocalContext.current.findActivity())
                 SeasonHistoryScreen(
                     onNavigateBack = { navController.navigateUp() },
                     viewModel = historyViewModel

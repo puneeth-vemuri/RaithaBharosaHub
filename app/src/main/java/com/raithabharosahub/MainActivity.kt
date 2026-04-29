@@ -13,8 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import com.raithabharosahub.presentation.navigation.AppNavGraph
 import com.raithabharosahub.ui.theme.RaithaBharosaHubTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,18 +32,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        lifecycleScope.launch {
-            applySavedLocale()
-            setContent {
-                RaithaBharosaHubTheme(dynamicColor = false) {
-                    AppNavGraph()
-                }
+        // Set content immediately to show UI
+        setContent {
+            RaithaBharosaHubTheme(dynamicColor = false) {
+                AppNavGraph()
             }
         }
-    }
 
-    private suspend fun applySavedLocale() {
-        val language = dataStore.data.first()[PREF_LANGUAGE] ?: DEFAULT_LANGUAGE
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language))
+        lifecycleScope.launch(Dispatchers.IO) {
+            val language = dataStore.data.first()[PREF_LANGUAGE] ?: DEFAULT_LANGUAGE
+            withContext(Dispatchers.Main) {
+                AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language))
+            }
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.raithabharosahub.presentation.onboarding.screens
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,13 +26,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.raithabharosahub.R
 import com.raithabharosahub.presentation.onboarding.OnboardingViewModel
+import com.raithabharosahub.util.findActivity
 
 private val BrandGreen = Color(0.086275f, 0.639216f, 0.290196f, 1f)
 
 @Composable
 fun LanguagePickerScreen(
     onLanguageSelected: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
+    viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current.findActivity())
 ) {
     Box(
         modifier = Modifier

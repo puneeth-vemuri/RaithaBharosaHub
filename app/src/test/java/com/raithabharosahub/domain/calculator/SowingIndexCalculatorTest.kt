@@ -1,9 +1,8 @@
 package com.raithabharosahub.domain.calculator
 
 import com.raithabharosahub.domain.model.SowingState
+import org.junit.Assert.*
 import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * Unit tests for SowingIndexCalculator.
@@ -24,8 +23,8 @@ class SowingIndexCalculatorTest {
             rainProbability = 0.1f   // Low rain probability
         )
 
-        assertTrue(result.score > 70f, "Score should be > 70 for ideal conditions")
-        assertEquals(SowingState.GREEN, result.state, "State should be GREEN")
+        assertTrue("Score should be > 70 for ideal conditions", result.score > 70f)
+        assertEquals("State should be GREEN", SowingState.GREEN, result.state)
     }
 
     /**
@@ -39,8 +38,8 @@ class SowingIndexCalculatorTest {
             rainProbability = 0.5f   // Moderate rain
         )
 
-        assertTrue(result.score in 40f..70f, "Score should be in YELLOW band (40–70)")
-        assertEquals(SowingState.YELLOW, result.state, "State should be YELLOW")
+        assertTrue("Score should be in YELLOW band (40–70)", result.score in 40f..70f)
+        assertEquals("State should be YELLOW", SowingState.YELLOW, result.state)
     }
 
     /**
@@ -54,8 +53,9 @@ class SowingIndexCalculatorTest {
             rainProbability = 0.9f   // High rain probability
         )
 
-        assertTrue(result.score < 40f, "Score should be < 40 for poor conditions")
-        assertEquals(SowingState.RED, result.state, "State should be RED")
+        println("DEBUG: Actual score = ${result.score}, state = ${result.state}")
+        assertTrue("Score should be < 40 for poor conditions (actual: ${result.score})", result.score < 40f)
+        assertEquals("State should be RED", SowingState.RED, result.state)
     }
 
     /**
@@ -69,8 +69,8 @@ class SowingIndexCalculatorTest {
             rainProbability = 0.0f   // No rain (normally ideal)
         )
 
-        assertEquals(0f, result.score, "Score should be 0 when soil is too wet")
-        assertEquals(SowingState.RED, result.state, "State should be RED")
+        assertEquals("Score should be 0 when soil is too wet", 0f, result.score)
+        assertEquals("State should be RED", SowingState.RED, result.state)
         // Note: messageId should be MESSAGE_SOIL_TOO_WET (0x7F07_0004 placeholder)
     }
 
@@ -97,8 +97,8 @@ class SowingIndexCalculatorTest {
 
         // Non-optimal score should be strictly lower than optimal
         // (both should be valid, but non-optimal is clamped by 20 points)
-        assertTrue(resultNonOptimal.score < resultOptimal.score,
-            "Non-optimal moisture should result in lower score")
+        assertTrue("Non-optimal moisture should result in lower score",
+            resultNonOptimal.score < resultOptimal.score)
     }
 
     /**
@@ -122,8 +122,8 @@ class SowingIndexCalculatorTest {
             crop = "Ragi"
         )
 
-        assertTrue(resultHigh.score < resultOptimal.score,
-            "High moisture should result in lower score for Ragi")
+        assertTrue("High moisture should result in lower score for Ragi",
+            resultHigh.score < resultOptimal.score)
     }
 
     /**
@@ -147,8 +147,8 @@ class SowingIndexCalculatorTest {
             crop = "Sugarcane"
         )
 
-        assertTrue(resultLow.score < resultOptimal.score,
-            "Low moisture should result in lower score for Sugarcane")
+        assertTrue("Low moisture should result in lower score for Sugarcane",
+            resultLow.score < resultOptimal.score)
     }
 
     /**
@@ -162,7 +162,7 @@ class SowingIndexCalculatorTest {
             rainProbability = 0.5f
         )
 
-        assertTrue(result.score in 0f..100f, "Score must be normalized to 0–100")
+        assertTrue("Score must be normalized to 0–100", result.score in 0f..100f)
     }
 
     /**
@@ -182,7 +182,7 @@ class SowingIndexCalculatorTest {
             rainProbability = 0.9f
         )
 
-        assertTrue(resultLowRain.score > resultHighRain.score,
-            "Low rain probability should result in higher score")
+        assertTrue("Low rain probability should result in higher score",
+            resultLowRain.score > resultHighRain.score)
     }
 }

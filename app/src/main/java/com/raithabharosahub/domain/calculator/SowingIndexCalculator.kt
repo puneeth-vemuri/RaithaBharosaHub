@@ -68,14 +68,24 @@ class SowingIndexCalculator @Inject constructor() {
             )
         }
 
-        // Normalize inputs to 0–1 scale for weighted calculation
-        // Moisture: optimal range ~10–40%, so normalize 10–40 → 0–1
-        val normalizedMoisture = (moisture - 10f) / (40f - 10f)
-            .coerceIn(0f, 1f)
+        // Normalize inputs using optimal ranges
+        // Moisture: optimal 20-35% maps to 0.7-1.0, with 10-45% as full range
+        val normalizedMoisture = when {
+            moisture < 10f -> 0f
+            moisture > 45f -> 0f
+            moisture in 20f..35f -> 0.7f + (moisture - 20f) / (35f - 20f) * 0.3f  // 20-35% → 0.7-1.0
+            moisture < 20f -> (moisture - 10f) / (20f - 10f) * 0.7f  // 10-20% → 0-0.7
+            else -> 1f - (moisture - 35f) / (45f - 35f) * 0.3f  // 35-45% → 1.0-0.7
+        }.coerceIn(0f, 1f)
 
-        // Temperature: optimal range ~18–35°C, so normalize 18–35 → 0–1
-        val normalizedTemperature = (temperature - 18f) / (35f - 18f)
-            .coerceIn(0f, 1f)
+        // Temperature: optimal 20-30°C maps to 0.7-1.0, with 15-35°C as full range
+        val normalizedTemperature = when {
+            temperature < 15f -> 0f
+            temperature > 35f -> 0f
+            temperature in 20f..30f -> 0.7f + (temperature - 20f) / (30f - 20f) * 0.3f  // 20-30°C → 0.7-1.0
+            temperature < 20f -> (temperature - 15f) / (20f - 15f) * 0.7f  // 15-20°C → 0-0.7
+            else -> 1f - (temperature - 30f) / (35f - 30f) * 0.3f  // 30-35°C → 1.0-0.7
+        }.coerceIn(0f, 1f)
 
         // Rain probability: inverted (less rain = better for sowing)
         val inversePrecipitation = 1f - rainProbability

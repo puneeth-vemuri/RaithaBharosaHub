@@ -174,4 +174,23 @@
     <string name="language_kannada_display">ಕನ್ನಡ (Kannada)</string>
     <string name="settings_version_value">Raitha-Bharosa Hub v%1$s</string>
     <string name="settings_credit_value">MindMatrix VTU Internship — Puneeth Vemuri</string>
+
+    <!-- Missing strings for NFR-06 -->
+    <string name="season_saved_success">Season saved successfully</string>
+    <string name="content_desc_filter">Filter</string>
+    <string name="content_desc_cancel">Cancel</string>
+    <string name="content_desc_add_season">Add Season</string>
+    <string name="season_history_count">Season History (%d)</string>
+    <string name="plot_number">Plot #%d</string>
+    <string name="never">Never</string>
+    <string name="ok">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="recommendations_title">Recommendations</string>
+    <string name="npk_test_saved">NPK test saved successfully!</string>
+    <string name="deviation_format">Deviation: %.1f%%</string>
+    <string name="validation_must_be_between">Must be between 0 and 999</string>
+    <string name="validation_lab_name_empty">Lab name cannot be empty</string>
+    <string name="nutrient_n">N</string>
+    <string name="nutrient_p">P</string>
+    <string name="nutrient_k">K</string>
 </resources>

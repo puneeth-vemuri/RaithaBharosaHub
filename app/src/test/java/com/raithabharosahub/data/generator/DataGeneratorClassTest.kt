@@ -1,7 +1,7 @@
 package com.raithabharosahub.data.generator
 
+import org.junit.Assert.*
 import org.junit.Test
-import kotlin.test.assertTrue
 
 /**
  * Unit tests for DataGeneratorClass.
@@ -21,8 +21,8 @@ class DataGeneratorClassTest {
         repeat(iterations) {
             val moisture = generator.randomMoisture()
             assertTrue(
-                moisture in 10f..40f,
-                "Moisture $moisture should be in range 10–40%, iteration $it"
+                "Moisture $moisture should be in range 10–40%, iteration $it",
+                moisture in 10f..40f
             )
         }
     }
@@ -37,8 +37,8 @@ class DataGeneratorClassTest {
         repeat(iterations) {
             val temperature = generator.randomTemperature()
             assertTrue(
-                temperature in 18f..35f,
-                "Temperature $temperature should be in range 18–35°C, iteration $it"
+                "Temperature $temperature should be in range 18–35°C, iteration $it",
+                temperature in 18f..35f
             )
         }
     }
@@ -52,8 +52,8 @@ class DataGeneratorClassTest {
         repeat(iterations) {
             val humidity = generator.randomHumidity()
             assertTrue(
-                humidity in 40f..90f,
-                "Humidity $humidity should be in range 40–90%, iteration $it"
+                "Humidity $humidity should be in range 40–90%, iteration $it",
+                humidity in 40f..90f
             )
         }
     }
@@ -67,8 +67,8 @@ class DataGeneratorClassTest {
         repeat(iterations) {
             val rainProb = generator.randomRainProbability()
             assertTrue(
-                rainProb in 0f..1f,
-                "Rain probability $rainProb should be in range 0.0–1.0, iteration $it"
+                "Rain probability $rainProb should be in range 0.0–1.0, iteration $it",
+                rainProb in 0f..1f
             )
         }
     }
@@ -82,7 +82,7 @@ class DataGeneratorClassTest {
         repeat(100) {
             values.add(generator.randomMoisture())
         }
-        assertTrue(values.size > 50, "Should generate varied values, got ${values.size} unique")
+        assertTrue("Should generate varied values, got ${values.size} unique", values.size > 50)
     }
 
     /**
@@ -94,6 +94,6 @@ class DataGeneratorClassTest {
         repeat(100) {
             values.add(generator.randomTemperature())
         }
-        assertTrue(values.size > 50, "Should generate varied values, got ${values.size} unique")
+        assertTrue("Should generate varied values, got ${values.size} unique", values.size > 50)
     }
 }
