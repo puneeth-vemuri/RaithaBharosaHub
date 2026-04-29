@@ -157,4 +157,22 @@
     <string name="validation_crop_required">ಬೆಳೆ ಅಗತ್ಯವಿದೆ</string>
     <string name="validation_sow_date_required">ಬಿತ್ತನೆ ದಿನಾಂಕ ಅಗತ್ಯವಿದೆ</string>
     <string name="delete">ಅಳಿಸಿ</string>
+
+    <!-- Settings Screen (Kannada) -->
+    <string name="settings_title">ಸೆಟ್ಟಿಂಗ್‌ಗಳು</string>
+    <string name="back">ಹಿಂದೆ</string>
+    <string name="settings_language_section">ಭಾಷೆ</string>
+    <string name="settings_notifications_label">ಅಧಿಸೂಚನೆಗಳು</string>
+    <string name="settings_notifications_section">ನೋಟಿಫಿಕೇಶನ್‌ಗಳು</string>
+    <string name="settings_notifications_subtitle">ಹವಾಮಾನ ಎಚ್ಚರಿಕೆಗಳು ಮತ್ತು ಬಿತ್ತನೆ ಜ್ಞಾಪನೆಗಳು</string>
+    <string name="settings_units_section">ಘಟಕಗಳು</string>
+    <string name="settings_units_metric">ಮೆಟ್ರಿಕ್ (°C, mm)</string>
+    <string name="settings_about_section">ಬಗ್ಗೆ</string>
+    <string name="settings_version">ಆಪ್ ಆವೃತ್ತಿ</string>
+    <string name="settings_credit">ಇಂಟರ್ನ್‌ಶಿಪ್ ಕ್ರೆಡಿಟ್</string>
+    <string name="language_selected_checkmark">ಆಯ್ದ ಭಾಷೆ ಚೆಕ್‌ಮಾರ್ಕ್</string>
+    <string name="language_english_display">English</string>
+    <string name="language_kannada_display">ಕನ್ನಡ (Kannada)</string>
+    <string name="settings_version_value">ರೈತ ಭರೋಸಾ ಹಬ್ v%1$s</string>
+    <string name="settings_credit_value">ಮೈಂಡ್‌ಮ್ಯಾಟ್ರಿಕ್ಸ್ VTU ಇಂಟರ್ನ್‌ಶಿಪ್ — ಪುನೀತ್ ವೆಮುರಿ</string>
 </resources>

@@ -156,4 +156,22 @@
     <string name="validation_crop_required">Crop is required</string>
     <string name="validation_sow_date_required">Sowing date is required</string>
     <string name="delete">Delete</string>
+
+    <!-- Settings Screen -->
+    <string name="settings_title">Settings</string>
+    <string name="back">Back</string>
+    <string name="settings_language_section">Language</string>
+    <string name="settings_notifications_label">Notifications</string>
+    <string name="settings_notifications_section">Notifications</string>
+    <string name="settings_notifications_subtitle">Weather alerts and sowing reminders</string>
+    <string name="settings_units_section">Units</string>
+    <string name="settings_units_metric">Metric (°C, mm)</string>
+    <string name="settings_about_section">About</string>
+    <string name="settings_version">App Version</string>
+    <string name="settings_credit">Internship Credit</string>
+    <string name="language_selected_checkmark">Selected language checkmark</string>
+    <string name="language_english_display">English</string>
+    <string name="language_kannada_display">ಕನ್ನಡ (Kannada)</string>
+    <string name="settings_version_value">Raitha-Bharosa Hub v%1$s</string>
+    <string name="settings_credit_value">MindMatrix VTU Internship — Puneeth Vemuri</string>
 </resources>

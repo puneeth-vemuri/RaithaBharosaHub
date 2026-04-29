@@ -96,6 +96,6 @@ class WeatherRefreshWorker @AssistedInject constructor(
         /**
          * Worker tag for identification in WorkManager.
          */
-        const val WORKER_TAG = "weather_refresh_worker"
+        const val WORKER_TAG = "weather_refresh"
     }
 }

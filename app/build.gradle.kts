@@ -2,9 +2,8 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.compose")
-    id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.hilt.android)
 }
 
@@ -71,15 +70,17 @@ fun getLocalProperty(key: String, defaultValue: String): String {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation("com.google.android.material:material:1.9.0")
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     
     // Room Database
@@ -125,6 +126,19 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
+// Force Kotlin stdlib versions to match the Kotlin Gradle plugin
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            when (requested.name) {
+                "kotlin-stdlib",
+                "kotlin-stdlib-jdk7",
+                "kotlin-stdlib-jdk8",
+                "kotlin-reflect" -> useVersion("1.9.24")
+            }
+        }
+    }
+}
 tasks.matching { it.name.startsWith("kapt") }.configureEach {
     val kaptProcessJvmArgsGetter = javaClass.methods.firstOrNull { method ->
         method.name == "getKaptProcessJvmArgs" && method.parameterCount == 0

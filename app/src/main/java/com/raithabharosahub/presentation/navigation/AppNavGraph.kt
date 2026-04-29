@@ -50,6 +50,7 @@ import com.raithabharosahub.presentation.onboarding.screens.FarmerProfileScreen
 import com.raithabharosahub.presentation.onboarding.screens.LanguagePickerScreen
 import com.raithabharosahub.presentation.onboarding.screens.PermissionsScreen
 import com.raithabharosahub.presentation.onboarding.screens.PlotGpsScreen
+import com.raithabharosahub.presentation.settings.SettingsScreen
 
 object AppRoutes {
     const val OnboardingLanguage = "onboarding_language"
@@ -60,6 +61,7 @@ object AppRoutes {
     const val NpkCentre = "npk_centre"
     const val KrishiCalendar = "krishi_calendar"
     const val SeasonHistory = "season_history"
+    const val Settings = "settings"
 }
 
 @Composable
@@ -190,7 +192,10 @@ fun AppNavGraph(
             composable(AppRoutes.Dashboard) {
                 val dashboardViewModel: DashboardViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
                 DashboardScreen(
-                    viewModel = dashboardViewModel
+                    viewModel = dashboardViewModel,
+                    onSettingsClick = {
+                        navController.navigate(AppRoutes.Settings)
+                    }
                 )
             }
 
@@ -213,6 +218,12 @@ fun AppNavGraph(
                 SeasonHistoryScreen(
                     onNavigateBack = { navController.navigateUp() },
                     viewModel = historyViewModel
+                )
+            }
+
+            composable(AppRoutes.Settings) {
+                SettingsScreen(
+                    navController = navController
                 )
             }
         }

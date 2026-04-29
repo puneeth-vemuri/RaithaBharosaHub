@@ -1,5 +1,7 @@
 package com.raithabharosahub.presentation.onboarding
 
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -60,6 +62,7 @@ class OnboardingViewModel @Inject constructor(
             dataStore.edit { prefs ->
                 prefs[LANGUAGE_KEY] = language
             }
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language))
             _uiState.update {
                 it.copy(language = language, currentStep = 1)
             }
@@ -131,7 +134,8 @@ class OnboardingViewModel @Inject constructor(
     }
 
     companion object {
-        val LANGUAGE_KEY = stringPreferencesKey("language")
+        // Use same preference key as SettingsViewModel / MainActivity
+        val LANGUAGE_KEY = stringPreferencesKey("pref_language")
         val ONBOARDING_COMPLETE_KEY = booleanPreferencesKey("onboarding_complete")
     }
 }
