@@ -1,10 +1,14 @@
 package com.raithabharosahub.di
 
 import android.content.Context
-import com.raithabharosahub.BuildConfig
 import androidx.room.Room
+import com.raithabharosahub.BuildConfig
 import com.raithabharosahub.data.local.AppDatabase
-import com.raithabharosahub.data.local.dao.*
+import com.raithabharosahub.data.local.dao.FarmerDao
+import com.raithabharosahub.data.local.dao.NpkDao
+import com.raithabharosahub.data.local.dao.PlotDao
+import com.raithabharosahub.data.local.dao.SeasonDao
+import com.raithabharosahub.data.local.dao.WeatherDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

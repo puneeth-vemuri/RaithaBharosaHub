@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set content immediately to show UI
         setContent {
-            RaithaBharosaHubTheme(dynamicColor = false) {
+            RaithaBharosaHubTheme {
                 AppNavGraph()
             }
         }

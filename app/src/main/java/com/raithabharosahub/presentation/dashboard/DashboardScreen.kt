@@ -24,8 +24,11 @@ import androidx.compose.material.icons.filled.ThermostatAuto
 import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.Cloud
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -53,12 +56,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raithabharosahub.R
 import com.raithabharosahub.domain.model.SowingState
+import com.raithabharosahub.ui.theme.BrandGreen
 import com.raithabharosahub.ui.theme.RaithaBharosaHubTheme
 import kotlin.math.cos
 import kotlin.math.sin
@@ -80,18 +85,31 @@ fun DashboardScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
+                        // App icon (green leaf) + app name
+                        Icon(
+                            imageVector = Icons.Filled.Spa,
+                            contentDescription = null,
+                            tint = BrandGreen,
+                            modifier = Modifier.size(20.dp)
+                        )
                         Text(text = stringResource(R.string.app_name))
                         if (uiState.isOfflineMode) {
-                            Text(
-                                text = stringResource(R.string.offline_mode),
-                                color = MaterialTheme.colorScheme.error,
-                                fontSize = 12.sp,
-                                modifier = Modifier
-                                    .background(
-                                        color = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
-                                        shape = RoundedCornerShape(4.dp)
+                            AssistChip(
+                                onClick = { },
+                                colors = AssistChipDefaults.assistChipColors(
+                                    containerColor = Color(0xFFFFB300), // Amber
+                                    labelColor = Color.White
+                                ),
+                                shape = RoundedCornerShape(16.dp),
+                                border = null,
+                                modifier = Modifier.height(24.dp),
+                                label = {
+                                    Text(
+                                        text = stringResource(R.string.offline_mode),
+                                        fontSize = 10.sp,
+                                        fontWeight = FontWeight.Medium
                                     )
-                                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                                }
                             )
                         }
                     }
@@ -206,13 +224,9 @@ fun DashboardScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column {
+                        val lastUpdatedText = uiState.lastUpdated.ifEmpty { "Never" }
                         Text(
-                            text = stringResource(R.string.last_updated),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = uiState.lastUpdated.ifEmpty { "Never" },
+                            text = stringResource(R.string.last_updated, lastUpdatedText),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium
                         )
@@ -404,16 +418,31 @@ fun DataCard(
                 tint = color,
                 modifier = Modifier.size(24.dp)
             )
-            Text(
-                text = "${String.format("%.1f", value)}$unit",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = String.format("%.1f", value),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    softWrap = false
+                )
+                Text(
+                    text = unit,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    softWrap = false
+                )
+            }
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

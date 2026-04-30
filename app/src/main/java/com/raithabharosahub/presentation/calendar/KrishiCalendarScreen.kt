@@ -100,12 +100,6 @@ fun KrishiCalendarScreen(
                 }
             } else {
                 // SECTION A — Horizontal scrollable strip (top)
-                Text(
-                    text = stringResource(R.string.calendar_title),
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-                
                 DayStrip(
                     days = uiState.days,
                     selectedIndex = uiState.selectedDayIndex,
@@ -346,7 +340,8 @@ private fun DayDetailPanel(day: com.raithabharosahub.domain.model.KrishiDay) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = "${stringResource(R.string.rain_mm_label)}: ${String.format("%.1f", day.rainMm)} mm",
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
+                            softWrap = false
                         )
                     }
                     
@@ -364,7 +359,8 @@ private fun DayDetailPanel(day: com.raithabharosahub.domain.model.KrishiDay) {
                         val temp = 20 + (day.sowingScore / 100 * 15).toInt()
                         Text(
                             text = "${stringResource(R.string.temp_max_label)}: ${temp}°C",
-                            style = MaterialTheme.typography.bodyMedium
+                            style = MaterialTheme.typography.bodyMedium,
+                            softWrap = false
                         )
                     }
                 }

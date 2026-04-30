@@ -9,7 +9,6 @@ import androidx.work.WorkManager
 import com.raithabharosahub.worker.WeatherRefreshWorker
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -22,8 +21,7 @@ import kotlinx.coroutines.launch
 @HiltAndroidApp
 class RaithaBharosaApplication : Application() {
 
-    @Inject
-    lateinit var workManager: WorkManager
+    private val workManager by lazy(LazyThreadSafetyMode.NONE) { WorkManager.getInstance(this) }
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 

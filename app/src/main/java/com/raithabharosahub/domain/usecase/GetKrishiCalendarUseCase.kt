@@ -98,8 +98,18 @@ class GetKrishiCalendarUseCase @Inject constructor(
                     )
                 )
             } else {
-                // Generate mock data for missing days using random values
-                val mockRain = (0..30).random().toFloat()
+                // Generate mock data for missing days with specific rain values to create score variation
+                // Day 0-1: rainMm = 1.0 (GREEN ~80-90)
+                // Day 2-3: rainMm = 8.0 (YELLOW ~50-60)
+                // Day 4: rainMm = 20.0 (RED + storm warning on Day 3)
+                // Day 5-6: rainMm = 2.0 (GREEN recovery)
+                val mockRain = when (i) {
+                    0, 1 -> 1.0f
+                    2, 3 -> 8.0f
+                    4 -> 20.0f
+                    5, 6 -> 2.0f
+                    else -> 1.0f
+                }
                 val mockTemp = (20..35).random().toFloat()
                 val mockHumidity = (40..90).random().toFloat()
                 
@@ -107,6 +117,10 @@ class GetKrishiCalendarUseCase @Inject constructor(
                 val rainProbability = (mockRain / 30f).coerceIn(0f, 1f)
                 val temperature = mockTemp
                 val moisture = (mockHumidity * 0.5f).coerceIn(0f, 100f)
+                
+                // Check for storm warning (rain > 15mm on next day)
+                // Day 3 (index 3) should have storm warning because Day 4 has rainMm = 20.0
+                val hasStormWarning = i == 3 && mockRain > 15f
                 
                 val sowingResult = sowingIndexCalculator.calculateSowingIndex(
                     moisture = moisture,
@@ -123,8 +137,8 @@ class GetKrishiCalendarUseCase @Inject constructor(
                         sowingScore = sowingResult.score,
                         sowingState = sowingResult.state,
                         rainMm = mockRain,
-                        hasStormWarning = false,
-                        stormWarningMessage = 0,
+                        hasStormWarning = hasStormWarning,
+                        stormWarningMessage = if (hasStormWarning) R.string.storm_warning_fertilize_today else 0,
                         recommendedAction = getRecommendedAction(sowingResult.state),
                         cropMilestone = null
                     )

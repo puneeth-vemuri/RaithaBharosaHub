@@ -137,7 +137,7 @@ class DashboardViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update { it.copy(
                     isLoading = false,
-                    errorMessage = "Failed to refresh: ${e.message}",
+                    errorMessage = "Failed to refresh weather data. Please check your connection.",
                     isOfflineMode = true
                 ) }
             }
@@ -190,7 +190,7 @@ class DashboardViewModel @Inject constructor(
             } catch (e: Exception) {
                 _uiState.update { it.copy(
                     isLoading = false,
-                    errorMessage = "Simulation failed: ${e.message}"
+                    errorMessage = "Simulation failed. Please try again."
                 ) }
             }
         }

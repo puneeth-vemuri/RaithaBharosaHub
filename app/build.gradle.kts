@@ -3,7 +3,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
 }
 
@@ -47,8 +48,20 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    
+    // KSP configuration
+    ksp {
+        // Disable incremental processing to work around KSTypeArgument bug
+        arg("room.incremental", "false")
+        arg("room.expandProjection", "true")
+        arg("room.schemaLocation", "$projectDir/schemas")
+        // Workaround for KSTypeArgument.type should not have been null bug
+        arg("ksp.incremental", "false")
     }
 }
 
@@ -56,7 +69,6 @@ kotlin {
     jvmToolchain(17)
 }
 
-// Function to read properties from local.properties file
 fun getLocalProperty(key: String, defaultValue: String): String {
     val localProperties = Properties()
     val localPropertiesFile = rootProject.file("local.properties")
@@ -83,26 +95,24 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     
-    // Room Database
+    // Room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    add("kapt", libs.androidx.room.compiler)
+    // Room KSP processor
+    add("ksp", libs.androidx.room.compiler)
     
-    // SQLCipher for encryption - now enabled
+    // SQLCipher
     implementation(libs.sqlcipher.android)
     
-    // Hilt for Dependency Injection
+    // Hilt
     implementation(libs.hilt.android)
-    add("kapt", libs.hilt.compiler)
+    add("ksp", libs.hilt.android.compiler)
     
-    // Hilt Work extension for @HiltWorker
+    // Hilt Work
     implementation(libs.androidx.hilt.work)
-    add("kapt", libs.hilt.work.compiler)
+    add("ksp", libs.androidx.hilt.compiler)
     
-    // DataStore for preferences
     implementation(libs.androidx.datastore.preferences)
-    
-    // Network dependencies
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)
     implementation(libs.moshi)
@@ -110,11 +120,7 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
     implementation("com.google.android.gms:play-services-location:21.3.0")
-    
-    // WorkManager for background weather refresh
     implementation(libs.androidx.work.runtime.ktx)
-    
-    // MPAndroidChart for season history charts
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     
     testImplementation(libs.junit)
@@ -129,32 +135,13 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
-// Force Kotlin stdlib versions to match the Kotlin Gradle plugin
+// Kotlin version resolution strategy
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains.kotlin") {
             when (requested.name) {
-                "kotlin-stdlib",
-                "kotlin-stdlib-jdk7",
-                "kotlin-stdlib-jdk8",
-                "kotlin-reflect" -> useVersion("1.9.24")
+                "kotlin-stdlib", "kotlin-stdlib-jdk7", "kotlin-stdlib-jdk8", "kotlin-reflect" -> useVersion("1.9.24")
             }
         }
-    }
-}
-tasks.matching { it.name.startsWith("kapt") }.configureEach {
-    val kaptProcessJvmArgsGetter = javaClass.methods.firstOrNull { method ->
-        method.name == "getKaptProcessJvmArgs" && method.parameterCount == 0
-    }
-
-    if (kaptProcessJvmArgsGetter != null) {
-        @Suppress("UNCHECKED_CAST")
-        val kaptProcessJvmArgs = kaptProcessJvmArgsGetter.invoke(this) as? org.gradle.api.provider.ListProperty<String>
-        kaptProcessJvmArgs?.addAll(
-            listOf(
-                "-Djava.io.tmpdir=C:\\Users\\punee\\AppData\\Local\\Temp",
-                "-Dorg.sqlite.tmpdir=C:\\Users\\punee\\AppData\\Local\\Temp"
-            )
-        )
     }
 }

@@ -60,20 +60,20 @@
     <string name="dashboard_stub_title">Dashboard (Coming Up Next)</string>
 
     <!-- Dashboard Screen -->
-    <string name="dashboard_title">Raitha Bharosa Hub</string>
+    <string name="dashboard_title">Home</string>
     <string name="offline_mode">Offline Mode</string>
     <string name="last_updated">Last updated: %s</string>
     <string name="simulate_data">Simulate Data</string>
     <string name="moisture_label">Soil Moisture</string>
-    <string name="temperature_label">Temperature</string>
+    <string name="temperature_label">Temp</string>
     <string name="humidity_label">Humidity</string>
-    <string name="rain_24h_label">Rain (24h)</string>
+    <string name="rain_24h_label">Rain</string>
     <string name="refresh">Refresh</string>
     <string name="loading">Loading…</string>
     <string name="score_label">Sowing Index</string>
 
     <!-- NPK Input Centre -->
-    <string name="npk_title">NPK Input Centre</string>
+    <string name="npk_title">NPK</string>
     <string name="enter_test_tab">Enter Test</string>
     <string name="history_tab">History</string>
     <string name="nitrogen_label">Nitrogen (N)</string>
@@ -99,7 +99,7 @@
     <string name="npk_potassium_excess">Potassium %1$.0f%% above optimal — reduce potassium application</string>
 
     <!-- Krishi Calendar -->
-    <string name="calendar_title">7‑Day Krishi Calendar</string>
+    <string name="calendar_title">Calendar</string>
     <string name="storm_warning_fertilize_today">⚠️ Storm warning tomorrow — fertilize today</string>
     <string name="milestone_sow_day">🌱 Sow Day</string>
     <string name="milestone_first_irrigation">💧 First Irrigation</string>
@@ -133,7 +133,7 @@
     <string name="recommended_action_delay">Poor conditions — delay sowing</string>
     
     <!-- Season History -->
-    <string name="season_history_title">Season History</string>
+    <string name="season_history_title">History</string>
     <string name="filter_by_crop">Filter by Crop:</string>
     <string name="all_crops">All</string>
     <string name="add_new_season">Add New Season</string>
@@ -149,8 +149,8 @@
     <string name="ongoing">Ongoing</string>
     <string name="yield">Yield</string>
     <string name="crop_hint">Crop (e.g., Paddy, Ragi)</string>
-    <string name="sow_date_hint">Sow Date (timestamp)</string>
-    <string name="harvest_date_hint">Harvest Date (optional)</string>
+    <string name="sow_date_hint">Sow Date (DD/MM/YYYY)</string>
+    <string name="harvest_date_hint">Harvest Date (DD/MM/YYYY, optional)</string>
     <string name="yield_hint">Yield (kg, optional)</string>
     <string name="notes_hint">Notes (optional)</string>
     <string name="validation_crop_required">Crop is required</string>

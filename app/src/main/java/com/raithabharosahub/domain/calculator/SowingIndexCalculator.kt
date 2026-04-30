@@ -1,5 +1,6 @@
 package com.raithabharosahub.domain.calculator
 
+import com.raithabharosahub.R
 import com.raithabharosahub.domain.model.SowingResult
 import com.raithabharosahub.domain.model.SowingState
 import javax.inject.Inject
@@ -34,14 +35,13 @@ import javax.inject.Singleton
 class SowingIndexCalculator @Inject constructor() {
 
     /**
-     * String resource IDs for messages (will be injected at compile-time from R.string)
-     * These are placeholder constants; at runtime they should use R.string.* values.
+     * String resource IDs for messages.
      */
     companion object {
-        private const val MESSAGE_SOW_NOW = 0x7F07_0001          // Placeholder for R.string.sow_now
-        private const val MESSAGE_CAUTION = 0x7F07_0002          // Placeholder for R.string.caution_check_conditions
-        private const val MESSAGE_WAIT = 0x7F07_0003             // Placeholder for R.string.wait_conditions_poor
-        private const val MESSAGE_SOIL_TOO_WET = 0x7F07_0004     // Placeholder for R.string.soil_too_wet
+        private val MESSAGE_SOW_NOW = R.string.sow_now
+        private val MESSAGE_CAUTION = R.string.caution_check_conditions
+        private val MESSAGE_WAIT = R.string.wait_conditions_poor
+        private val MESSAGE_SOIL_TOO_WET = R.string.soil_too_wet
     }
 
     /**
@@ -141,8 +141,6 @@ class SowingIndexCalculator @Inject constructor() {
     /**
      * Convenience method to set message IDs from actual R.string resources.
      * Call this once during app initialization if injecting actual resource IDs is needed.
-     *
-     * For now, callers should override messageId mapping in a subclass or factory.
      */
     internal fun setMessageIds(
         sowNow: Int,
@@ -150,7 +148,6 @@ class SowingIndexCalculator @Inject constructor() {
         wait: Int,
         soilTooWet: Int
     ) {
-        // Note: Kotlin companion objects are immutable, so this is illustrative.
-        // In production, use dependency injection to provide resource IDs.
+        // In this implementation, we use the constants directly.
     }
 }

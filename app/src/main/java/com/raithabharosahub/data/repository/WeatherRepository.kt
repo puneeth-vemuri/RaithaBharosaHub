@@ -5,7 +5,7 @@ import android.util.Log
 import com.squareup.moshi.Moshi
 import com.raithabharosahub.data.local.dao.WeatherDao
 import com.raithabharosahub.data.local.entity.WeatherEntity
-import com.raithabharosahub.data.generator.DataGeneratorClass
+import com.raithabharosahub.domain.generator.DataGeneratorClass
 import com.raithabharosahub.data.remote.WeatherApiService
 import com.raithabharosahub.data.remote.dto.WeatherResponseDto
 import dagger.hilt.android.qualifiers.ApplicationContext

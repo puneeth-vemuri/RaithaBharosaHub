@@ -29,9 +29,12 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val workManager: WorkManager,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
+
+    private val workManager: WorkManager by lazy(LazyThreadSafetyMode.NONE) {
+        WorkManager.getInstance(context)
+    }
 
     companion object {
         private val PREF_LANGUAGE = stringPreferencesKey("pref_language")

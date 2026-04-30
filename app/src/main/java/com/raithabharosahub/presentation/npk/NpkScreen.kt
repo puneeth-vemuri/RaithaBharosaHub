@@ -129,13 +129,6 @@ private fun EnterTestTab(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        item {
-            Text(
-                text = stringResource(R.string.npk_title),
-                style = MaterialTheme.typography.headlineSmall
-            )
-        }
-
         // Nitrogen Input
         item {
             OutlinedTextField(
