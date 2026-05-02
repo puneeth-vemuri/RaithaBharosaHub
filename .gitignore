@@ -20,3 +20,12 @@ app/build/
 /captures
 .externalNativeBuild
 .cxx
+
+.gradle-tmp/
+.roo/
+*.log
+build_output.txt
+logcat_output.txt
+debug_calc.kt
+ui*.xml
+ui_*.xml
