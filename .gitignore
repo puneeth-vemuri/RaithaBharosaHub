@@ -29,3 +29,5 @@ logcat_output.txt
 debug_calc.kt
 ui*.xml
 ui_*.xml
+CLAUDE.md
+DESIGN.md
