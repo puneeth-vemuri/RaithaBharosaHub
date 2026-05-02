@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.raithabharosahub.data.local.entity.WeatherEntity
 import com.raithabharosahub.data.repository.WeatherRepository
 import com.raithabharosahub.domain.calculator.SowingIndexCalculator
-import com.raithabharosahub.domain.generator.DataGeneratorClass
+import com.raithabharosahub.data.generator.DataGeneratorClass
 import com.raithabharosahub.domain.model.SowingResult
 import com.raithabharosahub.domain.usecase.GetWeatherForecastUseCase
 import dagger.hilt.android.qualifiers.ApplicationContext

@@ -29,7 +29,7 @@ import javax.inject.Singleton
  *   If moisture is outside the optimal range, score is clamped down by 20 points.
  *
  * Guard condition:
- *   If moisture > 38%, force RED state ("Soil Too Wet").
+ *   If moisture > 35%, force RED state ("Soil Too Wet").
  */
 @Singleton
 class SowingIndexCalculator @Inject constructor() {
@@ -59,8 +59,8 @@ class SowingIndexCalculator @Inject constructor() {
         rainProbability: Float,
         crop: String? = null
     ): SowingResult {
-        // Guard: If soil is too wet (>38%), force RED immediately
-        if (moisture > 38f) {
+        // Guard: If soil is too wet (>35%), force RED immediately
+        if (moisture > 35f) {
             return SowingResult(
                 score = 0f,
                 state = SowingState.RED,

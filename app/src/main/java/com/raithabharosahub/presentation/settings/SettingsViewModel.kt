@@ -21,7 +21,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
+    private val seasonDao: com.raithabharosahub.data.local.dao.SeasonDao,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -125,6 +126,10 @@ class SettingsViewModel @Inject constructor(
             ExistingPeriodicWorkPolicy.UPDATE,
             periodicWorkRequest
         )
+    }
+
+    suspend fun getAllSeasonsStatic(): List<com.raithabharosahub.data.local.entity.SeasonEntity> {
+        return seasonDao.getAll().first()
     }
 }
 

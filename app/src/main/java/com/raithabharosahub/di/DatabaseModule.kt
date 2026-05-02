@@ -70,6 +70,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "raitha_bharosa.db"
         ).openHelperFactory(factory)
+            .addMigrations(AppDatabase.MIGRATION_1_2)
             .build()
     }
 

@@ -185,6 +185,13 @@ fun SeasonHistoryScreen(
                     }
 
                     item {
+                        YieldChart(
+                            seasons = uiState.seasons,
+                            selectedCropFilter = uiState.selectedCropFilter
+                        )
+                    }
+
+                    item {
                         AnimatedVisibility(
                             visible = uiState.isAddingNew,
                             enter = fadeIn() + expandVertically(),
@@ -925,5 +932,69 @@ private fun EmptyState() {
                 textAlign = TextAlign.Center
             )
         }
+    }
+}
+
+@Composable
+private fun YieldChart(seasons: List<SeasonEntity>, selectedCropFilter: String?) {
+    val completedSeasons = seasons.filter { it.harvestDate != null && it.yieldKg != null }
+        .filter { selectedCropFilter == null || it.crop == selectedCropFilter }
+        .sortedBy { it.sowDate }
+        
+    if (completedSeasons.isEmpty()) return
+
+    val chartDesc = stringResource(R.string.chart_yield_description)
+
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp),
+        shape = RoundedCornerShape(24.dp)
+    ) {
+        androidx.compose.ui.viewinterop.AndroidView(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            factory = { context ->
+                com.github.mikephil.charting.charts.BarChart(context).apply {
+                    description.text = chartDesc
+                    setDrawGridBackground(false)
+                    axisRight.isEnabled = false
+                    
+                    xAxis.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+                    xAxis.setDrawGridLines(false)
+                    xAxis.granularity = 1f
+                }
+            },
+            update = { chart ->
+                val entries = mutableListOf<com.github.mikephil.charting.data.BarEntry>()
+                val colors = mutableListOf<Int>()
+                val labels = mutableListOf<String>()
+
+                val dateFormat = java.text.SimpleDateFormat("yyyy", java.util.Locale.getDefault())
+
+                completedSeasons.forEachIndexed { index, season ->
+                    entries.add(com.github.mikephil.charting.data.BarEntry(index.toFloat(), season.yieldKg!!))
+                    labels.add(dateFormat.format(season.sowDate))
+                    
+                    val color = when (season.crop) {
+                        "Paddy" -> android.graphics.Color.parseColor("#1DA34A")
+                        "Ragi" -> android.graphics.Color.parseColor("#F59E0B")
+                        "Sugarcane" -> android.graphics.Color.parseColor("#0EA5E9")
+                        else -> android.graphics.Color.DKGRAY
+                    }
+                    colors.add(color)
+                }
+
+                val dataSet = com.github.mikephil.charting.data.BarDataSet(entries, "Yield (kg)").apply {
+                    this.colors = colors
+                    valueTextSize = 10f
+                }
+
+                chart.xAxis.valueFormatter = com.github.mikephil.charting.formatter.IndexAxisValueFormatter(labels)
+                chart.data = com.github.mikephil.charting.data.BarData(dataSet)
+                chart.invalidate()
+            }
+        )
     }
 }

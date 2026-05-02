@@ -7,9 +7,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import androidx.room.SkipQueryVerification
-import com.raithabharosahub.BuildConfig
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import com.raithabharosahub.BuildConfig
 import com.raithabharosahub.data.local.dao.FarmerDao
 import com.raithabharosahub.data.local.dao.NpkDao
 import com.raithabharosahub.data.local.dao.PlotDao
@@ -49,7 +50,7 @@ class Converters {
         NpkEntity::class,
         SeasonEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @SkipQueryVerification
@@ -68,6 +69,19 @@ abstract class AppDatabase : RoomDatabase() {
 
         private const val DATABASE_NAME = "raitha_bharosa.db"
         private const val ENCRYPTION_PASSWORD = "default_encryption_key_change_in_production" // TODO: Secure this
+
+        /**
+         * Migration v1 → v2: adds the `last_updated_at` column to the weather table.
+         * Existing rows get epoch (0) as the default, which the UI treats as "never updated".
+         * A default of 0 avoids NOT NULL constraint issues without requiring a rebuild.
+         */
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL(
+                    "ALTER TABLE weather ADD COLUMN last_updated_at INTEGER NOT NULL DEFAULT 0"
+                )
+            }
+        }
 
         /**
          * Get the database instance.
@@ -92,6 +106,7 @@ abstract class AppDatabase : RoomDatabase() {
                 DATABASE_NAME
             )
                 .openHelperFactory(factory)
+                .addMigrations(MIGRATION_1_2)
                 .addCallback(DatabaseCallback())
                 .build()
         }

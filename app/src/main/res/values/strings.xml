@@ -112,6 +112,9 @@
     <string name="storm_warning_label">Storm Warning</string>
     <string name="crop_milestone_label">Crop Milestone</string>
     <string name="sowing_index_label">Sowing Index</string>
+    <!-- NFR-05: text label required alongside color for accessibility -->
+    <string name="warning_complete_fertilization">Complete fertilization today — heavy rain forecast tomorrow</string>
+    <string name="milestone_paddy_day21_irrigation">Day 21 — First irrigation (Paddy)</string>
     
     <!-- Day names -->
     <string name="day_mon">Mon</string>
@@ -193,4 +196,8 @@
     <string name="nutrient_n">N</string>
     <string name="nutrient_p">P</string>
     <string name="nutrient_k">K</string>
+
+    <string name="chart_yield_description">Bar chart comparing yield across seasons</string>
+    <string name="export_history_button">Export Season History</string>
+    <string name="export_success_toast">History exported successfully</string>
 </resources>

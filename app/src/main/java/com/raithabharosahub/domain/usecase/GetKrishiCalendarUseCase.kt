@@ -69,18 +69,31 @@ class GetKrishiCalendarUseCase @Inject constructor(
                     crop = crop
                 )
                 
-                // Check for storm warning (rain > 15mm on next day)
+                // FIX: explicit parentheses — without them `?: 0f > 15f` parses as
+                // `?: (0f > 15f)` which is always false.
                 val hasStormWarning = if (i < 6) {
                     val nextDayWeather = weatherEntities.getOrNull(i + 1)
-                    nextDayWeather?.rainMm ?: 0f > 15f
+                    (nextDayWeather?.rainMm ?: 0f) > 15f
                 } else false
                 
-                // Add crop milestone markers
-                val cropMilestone = when (i) {
-                    0 -> "milestone_sow_day"
-                    7 -> "milestone_first_irrigation"
-                    21 -> "milestone_first_fertilization"
-                    else -> null
+                // Crop milestone markers.
+                // sowingDayOffset: how many days ago the sow date was. We use the
+                // earliest weather entry date as a proxy for the sow date. This means
+                // within a 7-day window starting at day 0, milestones at days that
+                // land inside [0..6] relative to sow date will show.
+                // For Paddy: "First irrigation" fires on calendar Day 21 from sow.
+                // Since the 7-day strip starts "today", we check if today+i == sowDate+21.
+                val sowDateMs = weatherEntities.firstOrNull()?.date?.time
+                    ?: calendar.timeInMillis
+                val daysSinceSow = ((calendar.timeInMillis - sowDateMs) /
+                    (24L * 60L * 60L * 1_000L)).toInt()
+                val cropMilestone: String? = when {
+                    daysSinceSow == 0  -> "milestone_sow_day"
+                    daysSinceSow == 21 && crop.equals("Paddy", ignoreCase = true)
+                                       -> "milestone_paddy_day21_irrigation"
+                    daysSinceSow == 7  -> "milestone_first_irrigation"
+                    daysSinceSow == 14 -> "milestone_first_fertilization"
+                    else               -> null
                 }
                 
                 days.add(
@@ -92,7 +105,8 @@ class GetKrishiCalendarUseCase @Inject constructor(
                         sowingState = sowingResult.state,
                         rainMm = weatherForDay.rainMm,
                         hasStormWarning = hasStormWarning,
-                        stormWarningMessage = if (hasStormWarning) R.string.storm_warning_fertilize_today else 0,
+                        stormWarningMessage = if (hasStormWarning)
+                                R.string.warning_complete_fertilization else 0,
                         recommendedAction = getRecommendedAction(sowingResult.state),
                         cropMilestone = cropMilestone
                     )
@@ -118,9 +132,11 @@ class GetKrishiCalendarUseCase @Inject constructor(
                 val temperature = mockTemp
                 val moisture = (mockHumidity * 0.5f).coerceIn(0f, 100f)
                 
-                // Check for storm warning (rain > 15mm on next day)
-                // Day 3 (index 3) should have storm warning because Day 4 has rainMm = 20.0
-                val hasStormWarning = i == 3 && mockRain > 15f
+                // FIX: operator precedence — same as the real-data path above.
+                val hasStormWarning = when (i) {
+                    3    -> mockRain > 15f   // Day 4 has rainMm=20 so Day 3 warns
+                    else -> false
+                }
                 
                 val sowingResult = sowingIndexCalculator.calculateSowingIndex(
                     moisture = moisture,
@@ -138,7 +154,8 @@ class GetKrishiCalendarUseCase @Inject constructor(
                         sowingState = sowingResult.state,
                         rainMm = mockRain,
                         hasStormWarning = hasStormWarning,
-                        stormWarningMessage = if (hasStormWarning) R.string.storm_warning_fertilize_today else 0,
+                        stormWarningMessage = if (hasStormWarning)
+                                R.string.warning_complete_fertilization else 0,
                         recommendedAction = getRecommendedAction(sowingResult.state),
                         cropMilestone = null
                     )
@@ -172,11 +189,21 @@ class GetKrishiCalendarUseCase @Inject constructor(
         }
     }
 
+    private fun getMilestoneResource(milestone: String): Int {
+        return when (milestone) {
+            "milestone_sow_day"                -> R.string.milestone_sow_day
+            "milestone_first_irrigation"       -> R.string.milestone_first_irrigation
+            "milestone_first_fertilization"    -> R.string.milestone_first_fertilization
+            "milestone_paddy_day21_irrigation" -> R.string.milestone_paddy_day21_irrigation
+            else                               -> R.string.milestone_sow_day
+        }
+    }
+
     private fun getRecommendedAction(state: SowingState): Int {
         return when (state) {
-            SowingState.GREEN -> R.string.recommended_action_sow
+            SowingState.GREEN  -> R.string.recommended_action_sow
             SowingState.YELLOW -> R.string.recommended_action_wait
-            SowingState.RED -> R.string.recommended_action_delay
+            SowingState.RED    -> R.string.recommended_action_delay
         }
     }
 }

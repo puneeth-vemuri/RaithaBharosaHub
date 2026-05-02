@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.work.WorkManager
 import com.raithabharosahub.domain.calculator.SowingIndexCalculator
 import dagger.Module
 import dagger.Provides
@@ -13,7 +14,11 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * Hilt module providing application-level dependencies (DataStore, generators, etc.)
+ * Hilt module providing application-level dependencies:
+ *  - Application Context
+ *  - DataStore<Preferences>
+ *  - SowingIndexCalculator
+ *  - WorkManager (singleton, used by MainActivity to enqueue WeatherRefreshWorker)
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -46,5 +51,18 @@ object AppModule {
     @Singleton
     fun provideSowingIndexCalculator(): SowingIndexCalculator {
         return SowingIndexCalculator()
+    }
+
+    /**
+     * Provides WorkManager singleton so it can be injected into MainActivity
+     * and any other component that needs to enqueue or inspect workers.
+     *
+     * WorkManager.getInstance() is itself a singleton backed by the application
+     * context, so wrapping it here is safe and idempotent.
+     */
+    @Provides
+    @Singleton
+    fun provideWorkManager(@ApplicationContext context: Context): WorkManager {
+        return WorkManager.getInstance(context)
     }
 }

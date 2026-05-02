@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -34,6 +36,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -53,6 +56,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    // Required so android.util.Log (and other Android stubs) return default
+    // values (0/false/null) instead of throwing during JVM unit tests.
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
+
     
     // KSP configuration
     ksp {
@@ -123,9 +135,15 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     
+    // Firebase
+    implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
+    implementation("com.google.firebase:firebase-analytics-ktx:21.5.1")
+    
     testImplementation(libs.junit)
-    testImplementation("androidx.test:core:1.5.0")
-    testImplementation("androidx.test.ext:junit-ktx:1.1.5")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("com.squareup.moshi:moshi:1.15.1")
+    testImplementation("com.squareup.moshi:moshi-kotlin:1.15.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -39,6 +39,14 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.raithabharosahub.R
+import androidx.compose.material3.Button
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
+import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileWriter
+import android.content.Intent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +55,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -138,6 +148,40 @@ fun SettingsScreen(
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            SettingsSection(title = "Data Export") {
+                Button(
+                    onClick = {
+                        scope.launch {
+                            val seasons = viewModel.getAllSeasonsStatic()
+                            val file = File(context.cacheDir, "season_export.csv")
+                            FileWriter(file).use { writer ->
+                                writer.append("Crop,PlotID,SowDate,HarvestDate,YieldKg\n")
+                                seasons.forEach { season ->
+                                    writer.append("${season.crop},${season.plotId},${season.sowDate.time},${season.harvestDate?.time ?: ""},${season.yieldKg ?: ""}\n")
+                                }
+                            }
+                            
+                            val uri = FileProvider.getUriForFile(
+                                context,
+                                "com.raithabharosahub.fileprovider",
+                                file
+                            )
+                            val intent = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/csv"
+                                putExtra(Intent.EXTRA_STREAM, uri)
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            context.startActivity(Intent.createChooser(intent, "Export History"))
+                        }
+                    },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(stringResource(id = R.string.export_history_button))
                 }
             }
 

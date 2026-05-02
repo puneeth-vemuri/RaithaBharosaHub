@@ -113,6 +113,8 @@
     <string name="storm_warning_label">ಚಂಡಮಾರುತ ಎಚ್ಚರಿಕೆ</string>
     <string name="crop_milestone_label">ಬೆಳೆ ಮೈಲಿಗಲ್ಲು</string>
     <string name="sowing_index_label">ಬಿತ್ತನೆ ಸೂಚ್ಯಂಕ</string>
+    <string name="warning_complete_fertilization">ಇಂದು ಗೊಬ್ಬರ ಹಾಕುವುದನ್ನು ಪೂರ್ಣಗೊಳಿಸಿ — ನಾಳೆ ಭಾರಿ ಮಳೆ ಮುನ್ಸೂಚನೆ</string>
+    <string name="milestone_paddy_day21_irrigation">ದಿನ 21 — ಮೊದಲ ನೀರಾವರಿ (ಭತ್ತ)</string>
     
     <!-- Day names (Kannada) -->
     <string name="day_mon">ಸೋಮ</string>
@@ -194,4 +196,8 @@
     <string name="nutrient_n">N</string>
     <string name="nutrient_p">P</string>
     <string name="nutrient_k">K</string>
+
+    <string name="chart_yield_description">ಋತುಗಳಾದ್ಯಂತ ಇಳುವರಿ ಹೋಲಿಸುವ ಕಂಬ ನಕ್ಷೆ</string>
+    <string name="export_history_button">ಋತು ಇತಿಹಾಸ ರಫ್ತು ಮಾಡಿ</string>
+    <string name="export_success_toast">ಇತಿಹಾಸ ಯಶಸ್ವಿಯಾಗಿ ರಫ್ತಾಗಿದೆ</string>
 </resources>

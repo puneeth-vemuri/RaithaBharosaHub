@@ -1,387 +1,322 @@
 package com.raithabharosahub.data.repository
 
 import android.content.Context
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import android.content.res.AssetManager
+import com.raithabharosahub.data.generator.DataGeneratorClass
 import com.raithabharosahub.data.local.dao.WeatherDao
 import com.raithabharosahub.data.local.entity.WeatherEntity
-import com.raithabharosahub.data.generator.DataGeneratorClass
 import com.raithabharosahub.data.remote.WeatherApiService
-import com.raithabharosahub.data.remote.dto.CityDto
-import com.raithabharosahub.data.remote.dto.CoordinateDto
 import com.raithabharosahub.data.remote.dto.ForecastDto
 import com.raithabharosahub.data.remote.dto.MainDto
 import com.raithabharosahub.data.remote.dto.WeatherResponseDto
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.*
+import retrofit2.HttpException
 import java.io.ByteArrayInputStream
-import java.io.InputStream
+import java.io.IOException
+import java.nio.charset.StandardCharsets
 import java.util.Date
 
 /**
- * Unit tests for WeatherRepository.
- * Tests API success, mock fallback, and Room persistence.
+ * Pure JVM unit tests for [WeatherRepository].
+ *
+ * All Android deps (Context, AssetManager, android.util.Log) are handled via:
+ *   - Mockito stubs for Context + AssetManager
+ *   - android.jar stub returns defaults for Log.d/i/w on JVM (see NOTE below)
+ *
+ * Room DAO is replaced with [FakeWeatherDao] — an in-memory manual fake.
+ *
+ * NOTE: add this to android {} block in build.gradle.kts so Log stubs work:
+ *   testOptions { unitTests { isReturnDefaultValues = true } }
+ *
+ * Three tiers under test:
+ *   Tier 1 — API success        : data saved, lastUpdatedAt is recent
+ *   Tier 2 — API IOException    : mock_weather.json fallback, Room still written
+ *   Tier 3 — mock JSON failure  : DataGenerator fallback, Room still written
+ *   Invariant: Room insertAll is called after every tier
  */
 class WeatherRepositoryTest {
 
-    private lateinit var repository: TestWeatherRepository
-    private lateinit var fakeWeatherDao: FakeWeatherDao
-    private lateinit var mockApiService: MockWeatherApiService
-    private lateinit var dataGenerator: DataGeneratorClass
-    private lateinit var moshi: Moshi
+    // ------------------------------------------------------------------
+    // Manual fake DAO
+    // ------------------------------------------------------------------
+
+    private class FakeWeatherDao : WeatherDao {
+        val insertedBatches = mutableListOf<List<WeatherEntity>>()
+        val deletedPlotIds  = mutableListOf<Long>()
+
+        override suspend fun insertAll(weatherList: List<WeatherEntity>) {
+            insertedBatches.add(weatherList)
+        }
+        override suspend fun deleteByPlotId(plotId: Long) {
+            deletedPlotIds.add(plotId)
+        }
+        override fun getByPlotId(plotId: Long): Flow<List<WeatherEntity>> =
+            flowOf(insertedBatches.lastOrNull() ?: emptyList())
+        override suspend fun getLastUpdatedAt(plotId: Long): Date? =
+            insertedBatches.lastOrNull()?.firstOrNull()?.lastUpdatedAt
+        override fun observeLastUpdatedAt(plotId: Long): Flow<Date?> =
+            flowOf(insertedBatches.lastOrNull()?.firstOrNull()?.lastUpdatedAt)
+
+        // Unused stubs — required by the interface
+        override suspend fun insert(weather: WeatherEntity) = 0L
+        override suspend fun update(weather: WeatherEntity) {}
+        override suspend fun delete(weather: WeatherEntity) {}
+        override suspend fun deleteById(weatherId: Long) {}
+        override suspend fun deleteOlderThan(thresholdDate: Date) {}
+        override suspend fun getById(weatherId: Long) = null
+        override fun getByPlotIdAndDateRange(
+            plotId: Long, startDate: Date, endDate: Date
+        ): Flow<List<WeatherEntity>> = flowOf(emptyList())
+        override suspend fun getLatestByPlotId(plotId: Long) = null
+        override fun getByDateRange(
+            startDate: Date, endDate: Date
+        ): Flow<List<WeatherEntity>> = flowOf(emptyList())
+        override suspend fun countByPlot(plotId: Long) =
+            insertedBatches.lastOrNull()?.size ?: 0
+        override suspend fun getAverageTemperature(
+            plotId: Long, startDate: Date, endDate: Date
+        ) = null
+        override suspend fun getTotalRainfall(
+            plotId: Long, startDate: Date, endDate: Date
+        ) = null
+    }
+
+    // ------------------------------------------------------------------
+    // Test fixtures
+    // ------------------------------------------------------------------
+
+    private lateinit var fakeDao:      FakeWeatherDao
+    private lateinit var mockContext:  Context
+    private lateinit var mockAssets:   AssetManager
+    private lateinit var mockApi:      WeatherApiService
+    private lateinit var moshi:        Moshi
+    private lateinit var repository:   WeatherRepository
+
+    companion object {
+        private const val PLOT_ID = 1L
+        private const val LAT     = 12.97
+        private const val LON     = 77.59
+
+        // Minimal valid OWM /forecast JSON (2 intervals)
+        private val VALID_JSON = """
+            {
+              "list": [
+                {
+                  "dt": 1700000000,
+                  "main": { "temp_max": 32.5, "humidity": 72 },
+                  "rain": { "3h": 0.0 }
+                },
+                {
+                  "dt": 1700010800,
+                  "main": { "temp_max": 34.0, "humidity": 65 },
+                  "rain": { "3h": 1.5 }
+                }
+              ]
+            }
+        """.trimIndent()
+    }
 
     @Before
-    fun setup() {
-        // Create a simple mock context using Mockito
-        fakeWeatherDao = FakeWeatherDao()
-        mockApiService = MockWeatherApiService()
-        dataGenerator = DataGeneratorClass()
-        moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
+    fun setUp() {
+        fakeDao     = FakeWeatherDao()
+        mockContext = mock()
+        mockAssets  = mock()
+        mockApi     = mock()
+        moshi       = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
-        // Create a mock context that returns a mock asset manager
-        // We'll use a simpler approach: modify the WeatherRepository to accept a custom asset loader
-        // For now, we'll create a minimal context that doesn't need to implement all methods
-        // We'll use a different approach: create a test-specific WeatherRepository that overrides loadMockWeatherJson
-        repository = TestWeatherRepository(
-            weatherApiService = mockApiService,
-            weatherDao = fakeWeatherDao,
-            dataGenerator = dataGenerator,
-            moshi = moshi
+        whenever(mockContext.assets).thenReturn(mockAssets)
+
+        repository = WeatherRepository(
+            context           = mockContext,
+            weatherApiService = mockApi,
+            weatherDao        = fakeDao,
+            dataGenerator     = DataGeneratorClass(),
+            moshi             = moshi
         )
     }
 
-    /**
-     * Test case 1: API success → data saved to Room → Flow emits
-     */
+    // ------------------------------------------------------------------
+    // Helpers
+    // ------------------------------------------------------------------
+
+    private fun stubMockJsonSuccess() {
+        val bytes = VALID_JSON.toByteArray(StandardCharsets.UTF_8)
+        whenever(mockAssets.open("mock_weather.json"))
+            .thenReturn(ByteArrayInputStream(bytes))
+    }
+
+    private fun stubMockJsonFailure() {
+        whenever(mockAssets.open("mock_weather.json"))
+            .thenThrow(IOException("asset not found"))
+    }
+
+    private fun makeApiResponse() = WeatherResponseDto(
+        forecastList = listOf(
+            ForecastDto(dt = 1700000000L, main = MainDto(tempMax = 31f, humidity = 70), rain = null),
+            ForecastDto(dt = 1700010800L, main = MainDto(tempMax = 33f, humidity = 65), rain = null)
+        )
+    )
+
+    // ------------------------------------------------------------------
+    // TIER 1 — API success
+    // ------------------------------------------------------------------
+
     @Test
-    fun test_apiSuccess_savesToRoom_flowEmits() = runBlocking {
-        val plotId = 1L
-        val latitude = 12.9716
-        val longitude = 77.5946
+    fun `tier1 API success saves entities to Room`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenReturn(makeApiResponse())
 
-        // Arrange: API returns valid response
-        mockApiService.shouldSucceed = true
+        repository.refreshWeather(PLOT_ID, LAT, LON)
 
-        // Act: Call refreshWeather
-        repository.refreshWeather(plotId, latitude, longitude)
-
-        // Assert: Data was saved to DAO
-        val savedData = fakeWeatherDao.getByPlotId(plotId).first()
-        assertEquals("Should have 56 forecast items", 56, savedData.size)
-
-        // Verify flow emits data
-        assertNotNull("Flow should emit saved weather data", savedData)
-        assertEquals("Plot ID should match", plotId, savedData[0].plotId)
+        assertTrue("Room must receive at least one insertAll after API success",
+            fakeDao.insertedBatches.isNotEmpty())
     }
 
-    /**
-     * Test case 2: API failure → mock JSON loaded → data saved to Room → Flow emits
-     */
     @Test
-    fun test_apiFailure_loadsMockJson_savesToRoom_flowEmits() = runBlocking {
-        val plotId = 2L
-        val latitude = 12.9716
-        val longitude = 77.5946
+    fun `tier1 API success entities carry correct plotId`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenReturn(makeApiResponse())
 
-        // Arrange: API will fail
-        mockApiService.shouldSucceed = false
+        repository.refreshWeather(PLOT_ID, LAT, LON)
 
-        // Act: Call refreshWeather
-        repository.refreshWeather(plotId, latitude, longitude)
-
-        // Assert: Mock data was loaded and saved to DAO
-        val savedData = fakeWeatherDao.getByPlotId(plotId).first()
-        // Mock JSON has only 1 item (see TestWeatherRepository mockJson)
-        assertEquals("Mock should have 1 forecast item", 1, savedData.size)
-
-        // Verify specific mock data
-        val firstItem = savedData[0]
-        assertEquals(plotId, firstItem.plotId)
-        assertEquals("First mock temp should be 28.5°C", 28.5f, firstItem.tempMax)
+        fakeDao.insertedBatches.last().forEach { entity ->
+            assertEquals("Each saved entity must have plotId=$PLOT_ID", PLOT_ID, entity.plotId)
+        }
     }
 
-    /**
-     * Test case 3: Multiple plots can have separate weather data
-     */
     @Test
-    fun test_multiplePlots_separateWeatherData() = runBlocking {
-        val plot1Id = 1L
-        val plot2Id = 2L
-        val latitude = 12.9716
-        val longitude = 77.5946
+    fun `tier1 API success lastUpdatedAt is recent within 5 seconds`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenReturn(makeApiResponse())
+        val before = System.currentTimeMillis()
 
-        mockApiService.shouldSucceed = true
+        repository.refreshWeather(PLOT_ID, LAT, LON)
 
-        // Act: Refresh weather for both plots
-        repository.refreshWeather(plot1Id, latitude, longitude)
-        repository.refreshWeather(plot2Id, latitude - 0.1, longitude - 0.1)
-
-        // Assert: Both plots have data
-        val plot1Data = fakeWeatherDao.getByPlotId(plot1Id).first()
-        val plot2Data = fakeWeatherDao.getByPlotId(plot2Id).first()
-
-        assertEquals(56, plot1Data.size)
-        assertEquals(56, plot2Data.size)
-        assertEquals(plot1Id, plot1Data[0].plotId)
-        assertEquals(plot2Id, plot2Data[0].plotId)
+        val lastUpdated = fakeDao.insertedBatches.last().first().lastUpdatedAt.time
+        assertTrue("lastUpdatedAt must be >= call start time", lastUpdated >= before)
+        assertTrue("lastUpdatedAt must be within 5 s of call", lastUpdated <= before + 5_000)
     }
 
-    /**
-     * Test case 4: Old data is replaced on refresh
-     */
     @Test
-    fun test_refreshReplaces_oldData() = runBlocking {
-        val plotId = 1L
-        val latitude = 12.9716
-        val longitude = 77.5946
+    fun `tier1 API success deleteByPlotId is called before insertAll`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenReturn(makeApiResponse())
 
-        mockApiService.shouldSucceed = true
+        repository.refreshWeather(PLOT_ID, LAT, LON)
 
-        // Act: First refresh
-        repository.refreshWeather(plotId, latitude, longitude)
-        var savedData = fakeWeatherDao.getByPlotId(plotId).first()
-        val firstCount = savedData.size
-
-        // Act: Second refresh (simulating data update)
-        repository.refreshWeather(plotId, latitude, longitude)
-        savedData = fakeWeatherDao.getByPlotId(plotId).first()
-
-        // Assert: Old data replaced, not appended
-        assertEquals("Data should be replaced, not appended", firstCount, savedData.size)
+        assertTrue("deleteByPlotId must be called to purge stale rows",
+            fakeDao.deletedPlotIds.contains(PLOT_ID))
     }
 
-    /**
-     * Fake implementation of WeatherDao for in-memory testing.
-     * Stores data in a mutable map without a real database.
-     */
-    private class FakeWeatherDao : WeatherDao {
-        private val dataStore = mutableMapOf<Long, MutableList<WeatherEntity>>()
+    // ------------------------------------------------------------------
+    // TIER 2 — API IOException → mock_weather.json
+    // ------------------------------------------------------------------
 
-        override suspend fun insert(weather: WeatherEntity): Long {
-            dataStore.computeIfAbsent(weather.plotId) { mutableListOf() }.add(weather)
-            return 1L
-        }
+    @Test
+    fun `tier2 API IOException falls back to mock JSON and Room is written`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw IOException("offline") }
+        stubMockJsonSuccess()
 
-        override suspend fun insertAll(weatherList: List<WeatherEntity>) {
-            weatherList.forEach { insert(it) }
-        }
+        repository.refreshWeather(PLOT_ID, LAT, LON)
 
-        override suspend fun update(weather: WeatherEntity) {
-            // Not implemented for tests
-        }
+        assertTrue("Room must be written via mock-JSON fallback",
+            fakeDao.insertedBatches.isNotEmpty())
+    }
 
-        override suspend fun delete(weather: WeatherEntity) {
-            // Not implemented for tests
-        }
+    @Test
+    fun `tier2 mock JSON rows carry correct plotId`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw IOException("timeout") }
+        stubMockJsonSuccess()
 
-        override suspend fun deleteById(weatherId: Long) {
-            // Not implemented for tests
-        }
+        repository.refreshWeather(PLOT_ID, LAT, LON)
 
-        override suspend fun deleteByPlotId(plotId: Long) {
-            dataStore.remove(plotId)
-        }
-
-        override suspend fun deleteOlderThan(thresholdDate: Date) {
-            // Not implemented for tests
-        }
-
-        override suspend fun getById(weatherId: Long): WeatherEntity? {
-            // Not implemented for tests
-            return null
-        }
-
-        override fun getByPlotId(plotId: Long): kotlinx.coroutines.flow.Flow<List<WeatherEntity>> {
-            return kotlinx.coroutines.flow.flowOf(dataStore[plotId] ?: emptyList())
-        }
-
-        override fun getByPlotIdAndDateRange(
-            plotId: Long,
-            startDate: Date,
-            endDate: Date
-        ): kotlinx.coroutines.flow.Flow<List<WeatherEntity>> {
-            // Not implemented for tests
-            return kotlinx.coroutines.flow.flowOf(emptyList())
-        }
-
-        override suspend fun getLatestByPlotId(plotId: Long): WeatherEntity? {
-            // Not implemented for tests
-            return null
-        }
-
-        override fun getByDateRange(
-            startDate: Date,
-            endDate: Date
-        ): kotlinx.coroutines.flow.Flow<List<WeatherEntity>> {
-            // Not implemented for tests
-            return kotlinx.coroutines.flow.flowOf(emptyList())
-        }
-
-        override suspend fun countByPlot(plotId: Long): Int {
-            return dataStore[plotId]?.size ?: 0
-        }
-
-        override suspend fun getAverageTemperature(plotId: Long, startDate: Date, endDate: Date): Float? {
-            val items = dataStore[plotId] ?: return null
-            val filtered = items.filter { it.date in startDate..endDate }
-            if (filtered.isEmpty()) return null
-            return filtered.map { it.tempMax }.average().toFloat()
-        }
-
-        override suspend fun getTotalRainfall(plotId: Long, startDate: Date, endDate: Date): Float? {
-            val items = dataStore[plotId] ?: return null
-            val filtered = items.filter { it.date in startDate..endDate }
-            if (filtered.isEmpty()) return null
-            return filtered.sumOf { it.rainMm.toDouble() }.toFloat()
+        fakeDao.insertedBatches.last().forEach { entity ->
+            assertEquals("Mock-JSON entity must have plotId=$PLOT_ID", PLOT_ID, entity.plotId)
         }
     }
 
-    /**
-     * Mock implementation of WeatherApiService for testing.
-     * Can be configured to succeed or fail.
-     */
-    private class MockWeatherApiService : WeatherApiService {
-        var shouldSucceed = true
+    @Test
+    fun `tier2 API HttpException 401 falls back to mock JSON`() = runTest {
+        val httpEx = mock<HttpException>()
+        whenever(httpEx.code()).thenReturn(401)
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw httpEx }
+        stubMockJsonSuccess()
 
-        override suspend fun getForecast(
-            latitude: Double,
-            longitude: Double,
-            apiKey: String,
-            units: String,
-            cnt: Int
-        ): WeatherResponseDto {
-            if (!shouldSucceed) {
-                throw Exception("API call failed (simulated)")
-            }
+        repository.refreshWeather(PLOT_ID, LAT, LON)
 
-            // Return a minimal valid response for testing
-            return WeatherResponseDto(
-                forecastList = createMockForecastList(),
-                city = CityDto(
-                    id = 1277333,
-                    name = "Bengaluru",
-                    coord = CoordinateDto(lat = latitude, lon = longitude),
-                    country = "IN",
-                    timezone = 19800
-                )
-            )
-        }
+        assertTrue("Room must be written when API returns 401 and mock JSON available",
+            fakeDao.insertedBatches.isNotEmpty())
+    }
 
-        private fun createMockForecastList(): List<ForecastDto> {
-            // Create 56 minimal forecast items (7 days × 8 items per day)
-            return (0 until 56).map { index ->
-                ForecastDto(
-                    dt = 1709251200L + (index * 3600L),  // 3-hour increments
-                    dtTxt = "2024-03-01 ${String.format("%02d", (index % 8) * 3)}:00:00",
-                    main = MainDto(
-                        temp = 25f + index * 0.1f,
-                        tempMin = 20f,
-                        tempMax = 28.5f + index * 0.05f,
-                        humidity = 65 + (index % 20),
-                        pressure = 1012
-                    ),
-                    rain = if (index % 10 == 0) {
-                        com.raithabharosahub.data.remote.dto.RainDto(threeHour = 2.5f)
-                    } else {
-                        com.raithabharosahub.data.remote.dto.RainDto(threeHour = 0f)
-                    },
-                    weather = emptyList(),
-                    rainProbability = if (index % 10 == 0) 0.3f else 0.0f
-                )
-            }
+    // ------------------------------------------------------------------
+    // TIER 3 — Both API and mock JSON fail → DataGenerator
+    // ------------------------------------------------------------------
+
+    @Test
+    fun `tier3 both tiers fail DataGenerator writes to Room`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw IOException("offline") }
+        stubMockJsonFailure()
+
+        repository.refreshWeather(PLOT_ID, LAT, LON)
+
+        assertTrue("DataGenerator (Tier 3) must always write to Room",
+            fakeDao.insertedBatches.isNotEmpty())
+    }
+
+    @Test
+    fun `tier3 DataGenerator fallback produces exactly 56 rows`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw IOException("offline") }
+        stubMockJsonFailure()
+
+        repository.refreshWeather(PLOT_ID, LAT, LON)
+
+        assertEquals("Tier 3 DataGenerator must produce 56 rows",
+            56, fakeDao.insertedBatches.last().size)
+    }
+
+    @Test
+    fun `tier3 DataGenerator rows carry correct plotId`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw IOException("offline") }
+        stubMockJsonFailure()
+
+        repository.refreshWeather(PLOT_ID, LAT, LON)
+
+        fakeDao.insertedBatches.last().forEachIndexed { i, entity ->
+            assertEquals("DataGenerator row $i must have plotId=$PLOT_ID", PLOT_ID, entity.plotId)
         }
     }
 
-    /**
-     * Test-specific WeatherRepository that overrides loadMockWeatherJson to avoid Android dependencies.
-     */
-    private class TestWeatherRepository(
-        private val weatherApiService: WeatherApiService,
-        private val weatherDao: WeatherDao,
-        private val dataGenerator: DataGeneratorClass,
-        private val moshi: Moshi
-    ) {
-        private val mockJson = """
-            {
-                "cod": "200",
-                "message": 0,
-                "cnt": 56,
-                "list": [
-                    {
-                        "dt": 1709251200,
-                        "dt_txt": "2024-03-01 00:00:00",
-                        "main": {
-                            "temp": 28.5,
-                            "temp_min": 26.0,
-                            "temp_max": 28.5,
-                            "pressure": 1012,
-                            "humidity": 65
-                        },
-                        "weather": [],
-                        "rain": {},
-                        "pop": 0.0
-                    }
-                ],
-                "city": {
-                    "id": 1277333,
-                    "name": "Bengaluru",
-                    "coord": {
-                        "lat": 12.9716,
-                        "lon": 77.5946
-                    },
-                    "country": "IN",
-                    "timezone": 19800
-                }
-            }
-        """.trimIndent()
+    // ------------------------------------------------------------------
+    // INVARIANT — Room is always written regardless of tier used
+    // ------------------------------------------------------------------
 
-        suspend fun refreshWeather(plotId: Long, latitude: Double, longitude: Double) {
-            try {
-                val response = weatherApiService.getForecast(
-                    latitude = latitude,
-                    longitude = longitude,
-                    apiKey = "test_key",
-                    units = "metric",
-                    cnt = 56
-                )
-                saveWeatherData(plotId, response)
-            } catch (e: Exception) {
-                // Load mock JSON
-                val adapter = moshi.adapter(WeatherResponseDto::class.java)
-                val response = adapter.fromJson(mockJson) ?: throw IllegalStateException("Failed to parse mock JSON")
-                saveWeatherData(plotId, response)
-            }
-        }
+    @Test
+    fun `invariant Room insertAll called after tier1`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenReturn(makeApiResponse())
+        repository.refreshWeather(PLOT_ID, LAT, LON)
+        assertFalse("insertedBatches must not be empty after Tier 1",
+            fakeDao.insertedBatches.isEmpty())
+    }
 
-        fun getWeatherForecast(plotId: Long): kotlinx.coroutines.flow.Flow<List<WeatherEntity>> {
-            return weatherDao.getByPlotId(plotId)
-        }
+    @Test
+    fun `invariant Room insertAll called after tier2`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw IOException("offline") }
+        stubMockJsonSuccess()
+        repository.refreshWeather(PLOT_ID, LAT, LON)
+        assertFalse("insertedBatches must not be empty after Tier 2",
+            fakeDao.insertedBatches.isEmpty())
+    }
 
-        private suspend fun saveWeatherData(plotId: Long, response: WeatherResponseDto) {
-            // Clear old data
-            weatherDao.deleteByPlotId(plotId)
-            
-            // Convert DTO to entities and save
-            val entities = response.forecastList?.mapNotNull { forecast ->
-                val dt = forecast.dt ?: 0L
-                WeatherEntity(
-                    plotId = plotId,
-                    date = Date(dt * 1000L),
-                    tempMax = forecast.main?.tempMax ?: 0f,
-                    rainMm = forecast.rain?.threeHour ?: 0f,
-                    humidity = forecast.main?.humidity?.toFloat() ?: 0f,
-                    fetchedAt = Date()
-                )
-            } ?: emptyList()
-            
-            if (entities.isNotEmpty()) {
-                weatherDao.insertAll(entities)
-            }
-        }
+    @Test
+    fun `invariant Room insertAll called after tier3`() = runTest {
+        whenever(mockApi.getForecast(any(), any(), any(), any())).thenAnswer { throw IOException("offline") }
+        stubMockJsonFailure()
+        repository.refreshWeather(PLOT_ID, LAT, LON)
+        assertFalse("insertedBatches must not be empty after Tier 3",
+            fakeDao.insertedBatches.isEmpty())
     }
 }
