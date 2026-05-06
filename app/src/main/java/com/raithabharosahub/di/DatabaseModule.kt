@@ -34,16 +34,12 @@ object DatabaseModule {
     @Singleton
     @Named("databasePassphrase")
     fun provideEncryptionPassphrase(): String {
-        val configuredPassphrase = BuildConfig.DATABASE_PASSPHRASE
+        val configuredPassphrase = BuildConfig.DB_PASSPHRASE
         if (configuredPassphrase.isNotBlank()) {
             return configuredPassphrase
         }
 
-        check(BuildConfig.DEBUG) {
-            "DATABASE_PASSPHRASE must be configured for release builds"
-        }
-
-        return "dev_encryption_key_change_in_production"
+        error("DB_PASSPHRASE must be configured in local.properties")
     }
 
     /**
@@ -68,7 +64,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "raitha_bharosa.db"
+            "raitha_db"
         ).openHelperFactory(factory)
             .addMigrations(AppDatabase.MIGRATION_1_2)
             .build()

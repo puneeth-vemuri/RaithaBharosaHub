@@ -43,6 +43,7 @@ class DashboardViewModel @Inject constructor(
     val uiState: StateFlow<DashboardUiState> = _uiState.asStateFlow()
 
     private val plotIdKey = stringPreferencesKey("selected_plot_id")
+    private var simulationClickCount = 0
     private val latitudeKey = stringPreferencesKey("selected_latitude")
     private val longitudeKey = stringPreferencesKey("selected_longitude")
 
@@ -96,8 +97,9 @@ class DashboardViewModel @Inject constructor(
         val latestWeather = weatherList.maxByOrNull { it.date } ?: weatherList.first()
         
         // Calculate sowing index
+        val moisture = (15f + (latestWeather.humidity - 40f) * 0.36f).coerceIn(10f, 40f)
         val sowingResult = sowingIndexCalculator.calculateSowingIndex(
-            moisture = latestWeather.humidity, // Using humidity as moisture proxy
+            moisture = moisture, // Derived from humidity
             temperature = latestWeather.tempMax,
             rainProbability = latestWeather.rainMm / 100f, // Convert mm to probability
             crop = "paddy" // Default crop - should come from farmer profile
@@ -106,13 +108,14 @@ class DashboardViewModel @Inject constructor(
         _uiState.update { currentState ->
             currentState.copy(
                 sowingResult = sowingResult,
-                moisture = latestWeather.humidity,
+                moisture = moisture,
                 temperature = latestWeather.tempMax,
                 humidity = latestWeather.humidity,
                 rainForecast24h = latestWeather.rainMm,
                 lastUpdated = formatTimestamp(latestWeather.fetchedAt)
             )
         }
+
     }
 
     private fun formatTimestamp(date: Date): String {
@@ -160,10 +163,38 @@ class DashboardViewModel @Inject constructor(
                 if (generatedWeather.isNotEmpty()) {
                     // Calculate sowing index from generated data
                     val latestWeather = generatedWeather.last()
+                    
+                    val moisture: Float
+                    val tempMax: Float
+                    val rainMm: Float
+                    val rainProb: Float
+
+                    when (simulationClickCount % 3) {
+                        0 -> {
+                            moisture = 28f
+                            tempMax = 25f
+                            rainMm = 1f
+                            rainProb = 0.1f
+                        }
+                        1 -> {
+                            moisture = 19f
+                            tempMax = 18f
+                            rainMm = 5f
+                            rainProb = 0.4f
+                        }
+                        else -> {
+                            moisture = 38f
+                            tempMax = 14f
+                            rainMm = 15f
+                            rainProb = 0.9f
+                        }
+                    }
+                    simulationClickCount++
+
                     val sowingResult = sowingIndexCalculator.calculateSowingIndex(
-                        moisture = latestWeather.humidity,
-                        temperature = latestWeather.tempMax,
-                        rainProbability = latestWeather.rainMm / 100f,
+                        moisture = moisture,
+                        temperature = tempMax,
+                        rainProbability = rainProb,
                         crop = "paddy"
                     )
                     
@@ -171,10 +202,10 @@ class DashboardViewModel @Inject constructor(
                         currentState.copy(
                             sowingResult = sowingResult,
                             weatherList = generatedWeather,
-                            moisture = latestWeather.humidity,
-                            temperature = latestWeather.tempMax,
+                            moisture = moisture,
+                            temperature = tempMax,
                             humidity = latestWeather.humidity,
-                            rainForecast24h = latestWeather.rainMm,
+                            rainForecast24h = rainMm,
                             lastUpdated = formatTimestamp(Date()),
                             isLoading = false,
                             isOfflineMode = true,

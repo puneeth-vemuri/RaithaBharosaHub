@@ -27,10 +27,10 @@ android {
             "OPENWEATHER_API_KEY",
             getLocalProperty("OWM_API_KEY", "demo_key_placeholder")
         )
-        val databasePassphrase = getLocalProperty("DATABASE_PASSPHRASE", "")
+        val dbPassphrase = getLocalProperty("DB_PASSPHRASE", "")
 
         buildConfigField("String", "OWM_API_KEY", "\"$openWeatherApiKey\"")
-        buildConfigField("String", "DATABASE_PASSPHRASE", "\"$databasePassphrase\"")
+        buildConfigField("String", "DB_PASSPHRASE", "\"$dbPassphrase\"")
     }
 
     buildTypes {
@@ -115,6 +115,7 @@ dependencies {
     
     // SQLCipher
     implementation(libs.sqlcipher.android)
+    implementation(libs.sqlite.ktx)
     
     // Hilt
     implementation(libs.hilt.android)

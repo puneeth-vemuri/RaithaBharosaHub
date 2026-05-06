@@ -67,8 +67,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        private const val DATABASE_NAME = "raitha_bharosa.db"
-        private const val ENCRYPTION_PASSWORD = "default_encryption_key_change_in_production" // TODO: Secure this
+        private const val DATABASE_NAME = "raitha_db"
 
         /**
          * Migration v1 → v2: adds the `last_updated_at` column to the weather table.
@@ -97,8 +96,11 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context, useEncryption: Boolean): AppDatabase {
-            val passphrase = resolvePassphrase()
-            val factory = SupportFactory(SQLiteDatabase.getBytes(passphrase.toCharArray()))
+            check(BuildConfig.DB_PASSPHRASE.isNotBlank()) {
+                "DB_PASSPHRASE must be configured in local.properties"
+            }
+            val passphrase = SQLiteDatabase.getBytes(BuildConfig.DB_PASSPHRASE.toCharArray())
+            val factory = SupportFactory(passphrase)
 
             return Room.databaseBuilder(
                 context.applicationContext,
@@ -109,19 +111,6 @@ abstract class AppDatabase : RoomDatabase() {
                 .addMigrations(MIGRATION_1_2)
                 .addCallback(DatabaseCallback())
                 .build()
-        }
-
-        private fun resolvePassphrase(): String {
-            val configuredPassphrase = BuildConfig.DATABASE_PASSPHRASE
-            if (configuredPassphrase.isNotBlank()) {
-                return configuredPassphrase
-            }
-
-            check(BuildConfig.DEBUG) {
-                "DATABASE_PASSPHRASE must be configured for release builds"
-            }
-
-            return ENCRYPTION_PASSWORD
         }
 
         /**

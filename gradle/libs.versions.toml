@@ -19,6 +19,7 @@ loggingInterceptor = "4.12.0"
 workmanager = "2.9.0"
 composeCompiler = "1.5.14"
 sqlite-jdbc = "3.43.2.2"
+sqlite-ktx = "2.4.0"
 ksp = "2.0.21-1.0.28"
 
 [libraries]
@@ -45,6 +46,7 @@ sqlite-jdbc = { group = "org.xerial", name = "sqlite-jdbc", version.ref = "sqlit
 
 # SQLCipher
 sqlcipher-android = { group = "net.zetetic", name = "android-database-sqlcipher", version.ref = "sqlcipher" }
+sqlite-ktx = { group = "androidx.sqlite", name = "sqlite-ktx", version.ref = "sqlite-ktx" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
