@@ -31,3 +31,13 @@ ui*.xml
 ui_*.xml
 CLAUDE.md
 DESIGN.md
+.gradle-tmp/
+.roo/
+*.log
+build_output.txt
+logcat_output.txt
+debug_calc.kt
+CLAUDE.md
+DESIGN.md
+ui*.xml
+ui_*.xml
