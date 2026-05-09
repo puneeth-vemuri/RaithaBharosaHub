@@ -42,3 +42,9 @@ DESIGN.md
 ui*.xml
 ui_*.xml
 app/google-services.json
+*.pdf
+
+# Firebase CLI
+.firebase/
+firebase-debug.log
+firebase-debug.*.log

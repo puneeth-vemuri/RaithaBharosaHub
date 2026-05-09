@@ -200,4 +200,14 @@
     <string name="chart_yield_description">Bar chart comparing yield across seasons</string>
     <string name="export_history_button">Export Season History</string>
     <string name="export_success_toast">History exported successfully</string>
+
+    <!-- Authentication -->
+    <string name="sign_in">Sign In</string>
+    <string name="register">Register</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="auth_failed">Authentication failed</string>
+    <string name="or_divider">OR</string>
+
 </resources>

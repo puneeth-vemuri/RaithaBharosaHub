@@ -1,14 +1,22 @@
 package com.raithabharosahub.presentation.history
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import com.raithabharosahub.data.local.dao.FarmerDao
+import com.raithabharosahub.data.local.dao.PlotDao
 import com.raithabharosahub.data.local.dao.SeasonDao
 import com.raithabharosahub.data.local.entity.SeasonEntity
+import com.raithabharosahub.data.repository.FirestoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -43,8 +51,14 @@ data class SeasonFormState(
 
 @HiltViewModel
 class SeasonHistoryViewModel @Inject constructor(
-    private val seasonDao: SeasonDao
+    private val seasonDao: SeasonDao,
+    private val dataStore: DataStore<Preferences>,
+    private val farmerDao: FarmerDao,
+    private val plotDao: PlotDao,
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
+
+    private val TAG = "SeasonHistoryVM"
 
     private val _uiState = MutableStateFlow(SeasonHistoryUiState())
     val uiState: StateFlow<SeasonHistoryUiState> = _uiState.asStateFlow()
@@ -130,8 +144,41 @@ class SeasonHistoryViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                // For simplicity, using current plotId = 1 (should come from DataStore)
-                val plotId = 1L
+                // Read active farmer/plot IDs from DataStore (set during onboarding)
+                val prefs = dataStore.data.first()
+                var farmerId = prefs[com.raithabharosahub.presentation.onboarding.OnboardingViewModel.ACTIVE_FARMER_KEY]?.toLongOrNull() ?: 0L
+                var plotId = prefs[com.raithabharosahub.presentation.onboarding.OnboardingViewModel.ACTIVE_PLOT_KEY]?.toLongOrNull() ?: 0L
+
+                Log.d(TAG, "Attempting to save season — farmerId=$farmerId plotId=$plotId")
+
+                // Guard: ensure onboarding completed and active IDs present
+                if (farmerId == 0L || plotId == 0L) {
+                    // Try to recover from Room (useful if DataStore was lost but Room was restored via Auto Backup)
+                    val fallbackFarmer = farmerDao.getAll().first().firstOrNull()
+                    val fallbackPlot = plotDao.getAll().first().firstOrNull()
+
+                    if (fallbackFarmer != null && fallbackPlot != null) {
+                        farmerId = fallbackFarmer.id
+                        plotId = fallbackPlot.id
+                        // Save back to DataStore to self-heal
+                        dataStore.edit { editPrefs ->
+                            editPrefs[com.raithabharosahub.presentation.onboarding.OnboardingViewModel.ACTIVE_FARMER_KEY] = farmerId.toString()
+                            editPrefs[com.raithabharosahub.presentation.onboarding.OnboardingViewModel.ACTIVE_PLOT_KEY] = plotId.toString()
+                            editPrefs[com.raithabharosahub.presentation.onboarding.OnboardingViewModel.ONBOARDING_COMPLETE_KEY] = true
+                        }
+                    } else {
+                        _uiState.update { it.copy(errorMessage = "Please complete onboarding first") }
+                        return@launch
+                    }
+                }
+
+                // Verify referenced farmer/plot exist
+                val farmer = farmerDao.getById(farmerId)
+                val plot = plotDao.getById(plotId)
+                if (farmer == null || plot == null) {
+                    _uiState.update { it.copy(errorMessage = "Please complete onboarding first") }
+                    return@launch
+                }
 
                 // Parse dates (simplified - in real app use DatePicker)
                 val sowDate = try {
@@ -169,7 +216,10 @@ class SeasonHistoryViewModel @Inject constructor(
                     notes = form.notes.ifBlank { null }
                 )
 
-                seasonDao.insert(seasonEntity)
+                Log.d(TAG, "Inserting SeasonEntity for plotId=${seasonEntity.plotId} crop=${seasonEntity.crop}")
+
+                val id = seasonDao.insert(seasonEntity)
+                firestoreRepository.syncSeasonEntry(seasonEntity.copy(id = id))
 
                 // Reset form and show success
                 _uiState.update {

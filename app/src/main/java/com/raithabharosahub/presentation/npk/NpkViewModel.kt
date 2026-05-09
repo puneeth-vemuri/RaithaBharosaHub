@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raithabharosahub.data.local.dao.NpkDao
 import com.raithabharosahub.data.local.entity.NpkEntity
+import com.raithabharosahub.data.repository.FirestoreRepository
 import com.raithabharosahub.util.NpkRecommendationEngine
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NpkViewModel @Inject constructor(
     private val npkDao: NpkDao,
-    private val recommendationEngine: NpkRecommendationEngine
+    private val recommendationEngine: NpkRecommendationEngine,
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NpkUiState())
@@ -118,7 +120,8 @@ class NpkViewModel @Inject constructor(
                 labName = state.labName
             )
             
-            npkDao.insert(npkEntity)
+            val id = npkDao.insert(npkEntity)
+            firestoreRepository.syncNpkEntry(npkEntity.copy(id = id))
             
             // Clear form after save
             _uiState.update {

@@ -200,4 +200,14 @@
     <string name="chart_yield_description">ಋತುಗಳಾದ್ಯಂತ ಇಳುವರಿ ಹೋಲಿಸುವ ಕಂಬ ನಕ್ಷೆ</string>
     <string name="export_history_button">ಋತು ಇತಿಹಾಸ ರಫ್ತು ಮಾಡಿ</string>
     <string name="export_success_toast">ಇತಿಹಾಸ ಯಶಸ್ವಿಯಾಗಿ ರಫ್ತಾಗಿದೆ</string>
+
+    <!-- Authentication (Kannada) -->
+    <string name="sign_in">ಸೈನ್ ಇನ್</string>
+    <string name="register">ನೋಂದಣಿ</string>
+    <string name="sign_in_with_google">Google ನಿಂದ ಸೈನ್ ಇನ್ ಮಾಡಿ</string>
+    <string name="email_hint">ಇಮೇಲ್</string>
+    <string name="password_hint">ಪಾಸ್ವರ್ಡ್</string>
+    <string name="auth_failed">ದೃಢೀಕರಣ ವಿಫಲವಾಗಿದೆ</string>
+    <string name="or_divider">ಅಥವಾ</string>
+
 </resources>

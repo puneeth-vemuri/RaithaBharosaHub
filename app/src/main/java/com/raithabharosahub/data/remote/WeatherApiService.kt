@@ -17,7 +17,7 @@ import retrofit2.http.Query
  *   parameter and could conflict if the interceptor key differs.
  *
  * API key source:
- *   BuildConfig.OWM_API_KEY  ←  local.properties: OWM_API_KEY=<your_key>
+ *   BuildConfig.OPENWEATHER_API_KEY  ←  local.properties: OPENWEATHER_API_KEY=<your_key>
  *   Never committed to source control.
  */
 interface WeatherApiService {

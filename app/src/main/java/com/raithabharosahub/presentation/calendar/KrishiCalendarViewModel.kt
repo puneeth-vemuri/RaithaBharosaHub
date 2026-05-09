@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.raithabharosahub.domain.model.KrishiDay
 import com.raithabharosahub.domain.model.SowingState
 import com.raithabharosahub.domain.usecase.GetKrishiCalendarUseCase
+import com.raithabharosahub.data.repository.WeatherRepository
+import com.raithabharosahub.data.local.dao.PlotDao
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +56,8 @@ data class DayForecast(
 @HiltViewModel
 class KrishiCalendarViewModel @Inject constructor(
     private val getKrishiCalendarUseCase: GetKrishiCalendarUseCase,
+    private val weatherRepository: WeatherRepository,
+    private val plotDao: PlotDao,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -101,6 +105,18 @@ class KrishiCalendarViewModel @Inject constructor(
 
     private fun loadCalendarData(plotId: Long, crop: String) {
         _uiState.update { it.copy(isLoading = true) }
+
+        // Trigger network refresh (3-tier fallback chain)
+        viewModelScope.launch {
+            try {
+                val plot = plotDao.getById(plotId)
+                if (plot != null) {
+                    weatherRepository.refreshWeather(plotId, plot.latitude, plot.longitude)
+                }
+            } catch (e: Exception) {
+                // Falls back to DB silently
+            }
+        }
 
         getKrishiCalendarUseCase(plotId, crop)
             .onEach { days ->

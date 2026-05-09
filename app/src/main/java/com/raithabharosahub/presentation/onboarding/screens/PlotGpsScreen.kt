@@ -30,7 +30,7 @@ import com.raithabharosahub.util.findActivity
 
 @Composable
 fun PlotGpsScreen(
-    onNext: () -> Unit,
+    onFinish: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel(LocalContext.current.findActivity())
 ) {
     val context = LocalContext.current
@@ -120,12 +120,12 @@ fun PlotGpsScreen(
         Button(
             onClick = {
                 viewModel.savePlotPin(latitude, longitude, plotLabel)
-                onNext()
+                viewModel.markOnboardingDone(onCompleted = onFinish)
             },
             enabled = canProceed,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(id = R.string.next))
+            Text(text = stringResource(id = R.string.finish_onboarding))
         }
     }
 }

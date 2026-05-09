@@ -42,7 +42,7 @@ private const val TAG = "WeatherRepository"
  * via [getWeatherForecast], a cold Flow that Room keeps current after every write.
  *
  * ## API key
- * Injected by the OkHttp interceptor in NetworkModule via BuildConfig.OWM_API_KEY
+ * Injected by the OkHttp interceptor in NetworkModule via BuildConfig.OPENWEATHER_API_KEY
  * (sourced from local.properties → never committed to VCS).
  */
 @Singleton

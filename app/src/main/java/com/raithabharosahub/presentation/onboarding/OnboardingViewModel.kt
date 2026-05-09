@@ -13,6 +13,7 @@ import com.raithabharosahub.data.local.dao.FarmerDao
 import com.raithabharosahub.data.local.dao.PlotDao
 import com.raithabharosahub.data.local.entity.FarmerEntity
 import com.raithabharosahub.data.local.entity.PlotEntity
+import com.raithabharosahub.data.repository.FirestoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,7 @@ import kotlinx.coroutines.launch
 
 data class OnboardingUiState(
     val currentStep: Int = 0,
-    val language: String = "kn",
+    val language: String = "",
     val farmerName: String = "",
     val mobile: String = "",
     val primaryCrop: String = "",
@@ -40,7 +41,8 @@ data class OnboardingUiState(
 class OnboardingViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val farmerDao: FarmerDao,
-    private val plotDao: PlotDao
+    private val plotDao: PlotDao,
+    private val firestoreRepository: FirestoreRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(OnboardingUiState())
@@ -49,7 +51,7 @@ class OnboardingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val preferences = dataStore.data.first()
-            val language = preferences[LANGUAGE_KEY] ?: "kn"
+            val language = preferences[LANGUAGE_KEY] ?: ""
             val isComplete = preferences[ONBOARDING_COMPLETE_KEY] ?: false
             _uiState.update {
                 it.copy(language = language, isComplete = isComplete, isLoading = false)
@@ -113,7 +115,7 @@ class OnboardingViewModel @Inject constructor(
             val lat = state.latitude.toDoubleOrNull() ?: 0.0
             val lon = state.longitude.toDoubleOrNull() ?: 0.0
 
-            plotDao.insert(
+            val plotId = plotDao.insert(
                 PlotEntity(
                     farmerId = farmerId,
                     latitude = lat,
@@ -122,9 +124,18 @@ class OnboardingViewModel @Inject constructor(
                 )
             )
 
+            // Persist active farmer/plot IDs so other screens (eg. Season save) can use them
             dataStore.edit { prefs ->
                 prefs[ONBOARDING_COMPLETE_KEY] = true
+                prefs[ACTIVE_FARMER_KEY] = farmerId.toString()
+                prefs[ACTIVE_PLOT_KEY] = plotId.toString()
             }
+
+            // Sync to Firestore
+            firestoreRepository.syncFarmerProfile(
+                FarmerEntity(id = farmerId, name = state.farmerName, mobile = state.mobile, primaryCrop = state.primaryCrop, district = state.district, languagePref = state.language),
+                PlotEntity(id = plotId, farmerId = farmerId, latitude = lat, longitude = lon, label = state.plotLabel)
+            )
 
             _uiState.update {
                 it.copy(isComplete = true, currentStep = 3)
@@ -137,5 +148,7 @@ class OnboardingViewModel @Inject constructor(
         // Use same preference key as SettingsViewModel / MainActivity
         val LANGUAGE_KEY = stringPreferencesKey("pref_language")
         val ONBOARDING_COMPLETE_KEY = booleanPreferencesKey("onboarding_complete")
+        val ACTIVE_FARMER_KEY = stringPreferencesKey("active_farmer_id")
+        val ACTIVE_PLOT_KEY = stringPreferencesKey("active_plot_id")
     }
 }

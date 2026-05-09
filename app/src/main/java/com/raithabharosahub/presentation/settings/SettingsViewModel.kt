@@ -2,6 +2,8 @@ package com.raithabharosahub.presentation.settings
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -9,27 +11,32 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.Constraints
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.raithabharosahub.MainActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.raithabharosahub.R
+import com.raithabharosahub.data.local.AppDatabase
 import com.raithabharosahub.worker.WeatherRefreshWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileWriter
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val seasonDao: com.raithabharosahub.data.local.dao.SeasonDao,
+    private val appDatabase: AppDatabase,
     @ApplicationContext private val context: Context
 ) : ViewModel() {
 
@@ -76,28 +83,34 @@ class SettingsViewModel @Inject constructor(
             }
             _uiState.value = _uiState.value.copy(selectedLanguage = code)
 
-            val restartIntent = Intent(context, MainActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
-            context.startActivity(restartIntent)
+            // Modern per-app locale API — triggers UI recomposition without full restart
+            androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(
+                androidx.core.os.LocaleListCompat.forLanguageTags(code)
+            )
         }
     }
 
-    fun toggleNotifications(enabled: Boolean) {
+    fun setNotificationsEnabled(enabled: Boolean) {
         viewModelScope.launch {
             dataStore.edit { preferences ->
                 preferences[PREF_NOTIFICATIONS] = enabled
             }
 
             if (enabled) {
-                scheduleWeatherRefreshWork()
+                // Delegate to the canonical factory in WeatherRefreshWorker —
+                // 15-min interval, EXPONENTIAL backoff (15 min initial), CONNECTED constraint,
+                // KEEP policy (no-op if already enqueued).
+                WeatherRefreshWorker.enqueuePeriodicWork(workManager)
             } else {
-                workManager.cancelAllWorkByTag(WeatherRefreshWorker.WORKER_TAG)
+                // Cancel only the unique periodic job — leave any in-flight expedited
+                // first-run (enqueued by MainActivity) untouched.
+                workManager.cancelUniqueWork(WeatherRefreshWorker.WORKER_TAG)
             }
 
             _uiState.value = _uiState.value.copy(notificationsEnabled = enabled)
         }
     }
+
 
     fun setUnitSystem(unit: String) {
         viewModelScope.launch {
@@ -108,28 +121,72 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun scheduleWeatherRefreshWork() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
+    fun exportSeasonHistory() {
+        viewModelScope.launch {
+            try {
+                val seasons = seasonDao.getAll().first()
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-        val periodicWorkRequest = PeriodicWorkRequestBuilder<WeatherRefreshWorker>(
-            30,
-            java.util.concurrent.TimeUnit.MINUTES
-        )
-            .setConstraints(constraints)
-            .addTag(WeatherRefreshWorker.WORKER_TAG)
-            .build()
+                // Build CSV string — columns: crop,sowDate,harvestDate,yieldKg,notes
+                val csv = buildString {
+                    appendLine("crop,sowDate,harvestDate,yieldKg,notes")
+                    seasons.forEach { season ->
+                        val crop       = season.crop.replace(",", ";")
+                        val sowDate    = dateFormat.format(season.sowDate)
+                        val harvestDate = season.harvestDate?.let { dateFormat.format(it) } ?: ""
+                        val yieldKg    = season.yieldKg?.toString() ?: ""
+                        val notes      = (season.notes ?: "").replace(",", ";").replace("\n", " ")
+                        appendLine("$crop,$sowDate,$harvestDate,$yieldKg,$notes")
+                    }
+                }
 
-        workManager.enqueueUniquePeriodicWork(
-            WeatherRefreshWorker.WORKER_TAG,
-            ExistingPeriodicWorkPolicy.UPDATE,
-            periodicWorkRequest
-        )
+                // Write to cacheDir/exports/ — must match file_paths.xml <cache-path path="exports/"/>
+                val exportDir = File(context.cacheDir, "exports")
+                withContext(Dispatchers.IO) {
+                    exportDir.mkdirs()
+                    val file = File(exportDir, "season_export.csv")
+                    FileWriter(file).use { it.write(csv) }
+
+                    val uri = FileProvider.getUriForFile(
+                        context,
+                        "com.raithabharosahub.fileprovider",
+                        file
+                    )
+
+                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/csv"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    context.startActivity(Intent.createChooser(shareIntent, "Export Season History").apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    })
+                }
+
+                // Show success toast on main thread
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.export_success_toast),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Export failed: ${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
-    suspend fun getAllSeasonsStatic(): List<com.raithabharosahub.data.local.entity.SeasonEntity> {
-        return seasonDao.getAll().first()
+    fun logout(onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            appDatabase.clearAllTables()
+            withContext(Dispatchers.Main) {
+                FirebaseAuth.getInstance().signOut()
+                onSuccess()
+            }
+        }
     }
 }
 

@@ -23,14 +23,16 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
-        val openWeatherApiKey = getLocalProperty(
-            "OPENWEATHER_API_KEY",
-            getLocalProperty("OWM_API_KEY", "demo_key_placeholder")
-        )
+        val openWeatherApiKey = getLocalProperty("OPENWEATHER_API_KEY", "demo_key_placeholder")
         val dbPassphrase = getLocalProperty("DB_PASSPHRASE", "")
+        // IMPORTANT: Set this in local.properties after adding SHA-1 in Firebase Console
+        // and enabling Google sign-in. Get it from Firebase Console → Project Settings →
+        // General → OAuth 2.0 Web client ID.
+        val firebaseWebClientId = getLocalProperty("FIREBASE_WEB_CLIENT_ID", "")
 
-        buildConfigField("String", "OWM_API_KEY", "\"$openWeatherApiKey\"")
+        buildConfigField("String", "OPENWEATHER_API_KEY", "\"$openWeatherApiKey\"")
         buildConfigField("String", "DB_PASSPHRASE", "\"$dbPassphrase\"")
+        buildConfigField("String", "FIREBASE_WEB_CLIENT_ID", "\"$firebaseWebClientId\"")
     }
 
     buildTypes {
@@ -139,6 +141,10 @@ dependencies {
     // Firebase
     implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
     implementation("com.google.firebase:firebase-analytics-ktx:21.5.1")
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
+    // Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
     
     testImplementation(libs.junit)
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.3.1")

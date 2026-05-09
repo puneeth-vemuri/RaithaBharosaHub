@@ -1,6 +1,6 @@
 package com.raithabharosahub.presentation.settings
 
-import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +15,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -39,14 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.raithabharosahub.R
-import androidx.compose.material3.Button
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.FileProvider
-import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileWriter
-import android.content.Intent
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,8 +50,6 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -90,16 +83,10 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
         ) {
             SettingsSection(title = stringResource(R.string.settings_language_section)) {
-                LanguageOptionRow(
-                    displayName = stringResource(R.string.language_english_display),
-                    isSelected = uiState.selectedLanguage == "en",
-                    onClick = { viewModel.setLanguage("en") }
-                )
-                Divider(modifier = Modifier.padding(horizontal = 16.dp))
-                LanguageOptionRow(
-                    displayName = stringResource(R.string.language_kannada_display),
-                    isSelected = uiState.selectedLanguage == "kn",
-                    onClick = { viewModel.setLanguage("kn") }
+                LanguageToggleRow(
+                    selectedLanguage = uiState.selectedLanguage,
+                    onSelectEnglish = { viewModel.setLanguage("en") },
+                    onSelectKannada = { viewModel.setLanguage("kn") }
                 )
             }
 
@@ -128,7 +115,7 @@ fun SettingsScreen(
                     }
                     Switch(
                         checked = uiState.notificationsEnabled,
-                        onCheckedChange = { enabled -> viewModel.toggleNotifications(enabled) }
+                        onCheckedChange = { enabled -> viewModel.setNotificationsEnabled(enabled) }
                     )
                 }
             }
@@ -155,33 +142,30 @@ fun SettingsScreen(
 
             SettingsSection(title = "Data Export") {
                 Button(
-                    onClick = {
-                        scope.launch {
-                            val seasons = viewModel.getAllSeasonsStatic()
-                            val file = File(context.cacheDir, "season_export.csv")
-                            FileWriter(file).use { writer ->
-                                writer.append("Crop,PlotID,SowDate,HarvestDate,YieldKg\n")
-                                seasons.forEach { season ->
-                                    writer.append("${season.crop},${season.plotId},${season.sowDate.time},${season.harvestDate?.time ?: ""},${season.yieldKg ?: ""}\n")
-                                }
-                            }
-                            
-                            val uri = FileProvider.getUriForFile(
-                                context,
-                                "com.raithabharosahub.fileprovider",
-                                file
-                            )
-                            val intent = Intent(Intent.ACTION_SEND).apply {
-                                type = "text/csv"
-                                putExtra(Intent.EXTRA_STREAM, uri)
-                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                            }
-                            context.startActivity(Intent.createChooser(intent, "Export History"))
-                        }
-                    },
+                    onClick = { viewModel.exportSeasonHistory() },
                     modifier = Modifier.padding(16.dp)
                 ) {
-                    Text(stringResource(id = R.string.export_history_button))
+                    Text(stringResource(R.string.export_history_button))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            SettingsSection(title = "Account") {
+                Button(
+                    onClick = {
+                        viewModel.logout {
+                            navController.navigate(com.raithabharosahub.presentation.navigation.AppRoutes.Login) {
+                                popUpTo(0) { inclusive = true }
+                            }
+                        }
+                    },
+                    modifier = Modifier.padding(16.dp),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("Log Out")
                 }
             }
 
@@ -232,33 +216,95 @@ private fun SettingsSection(
 }
 
 @Composable
-private fun LanguageOptionRow(
-    displayName: String,
-    isSelected: Boolean,
-    onClick: () -> Unit
+private fun LanguageToggleRow(
+    selectedLanguage: String,
+    onSelectEnglish: () -> Unit,
+    onSelectKannada: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            text = displayName,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface
-        )
-        if (isSelected) {
-            Icon(
-                imageVector = Icons.Default.Check,
-                contentDescription = stringResource(R.string.language_selected_checkmark),
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp)
-            )
+        // English chip
+        val englishSelected = selectedLanguage == "en"
+        if (englishSelected) {
+            Button(
+                onClick = onSelectEnglish,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                if (englishSelected) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.size(6.dp))
+                }
+                Text(
+                    text = stringResource(R.string.language_english_display),
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
         } else {
-            Spacer(modifier = Modifier.size(24.dp))
+            androidx.compose.material3.OutlinedButton(
+                onClick = onSelectEnglish,
+                modifier = Modifier.weight(1f),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outline
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.language_english_display),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        // Kannada chip
+        val kannadaSelected = selectedLanguage == "kn"
+        if (kannadaSelected) {
+            Button(
+                onClick = onSelectKannada,
+                modifier = Modifier.weight(1f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(modifier = Modifier.size(6.dp))
+                Text(
+                    text = stringResource(R.string.language_kannada_display),
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        } else {
+            androidx.compose.material3.OutlinedButton(
+                onClick = onSelectKannada,
+                modifier = Modifier.weight(1f),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outline
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.language_kannada_display),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }

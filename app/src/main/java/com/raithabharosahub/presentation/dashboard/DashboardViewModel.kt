@@ -1,6 +1,8 @@
 package com.raithabharosahub.presentation.dashboard
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -69,12 +71,19 @@ class DashboardViewModel @Inject constructor(
                 _uiState.update { currentState ->
                     currentState.copy(
                         weatherList = weatherList,
-                        isOfflineMode = weatherList.isEmpty()
+                        isOfflineMode = checkIsOffline()
                     )
                 }
                 calculateSowingIndexFromWeather(weatherList)
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun checkIsOffline(): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork
+        val capabilities = connectivityManager.getNetworkCapabilities(network)
+        return capabilities == null || !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
     private fun calculateSowingIndexFromWeather(weatherList: List<WeatherEntity>) {
@@ -136,12 +145,12 @@ class DashboardViewModel @Inject constructor(
                 // Trigger refresh in repository - using default plotId 1 for now
                 // In a real app, we would get the plotId from the database
                 weatherRepository.refreshWeather(1L, lat, lon)
-                _uiState.update { it.copy(isLoading = false, errorMessage = null) }
+                _uiState.update { it.copy(isLoading = false, errorMessage = null, isOfflineMode = checkIsOffline()) }
             } catch (e: Exception) {
                 _uiState.update { it.copy(
                     isLoading = false,
                     errorMessage = "Failed to refresh weather data. Please check your connection.",
-                    isOfflineMode = true
+                    isOfflineMode = checkIsOffline()
                 ) }
             }
         }

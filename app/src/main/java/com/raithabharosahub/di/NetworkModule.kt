@@ -31,7 +31,7 @@ object NetworkModule {
     @Singleton
     @Named("openWeatherApiKey")
     fun provideOpenWeatherApiKey(): String {
-        return BuildConfig.OWM_API_KEY
+        return BuildConfig.OPENWEATHER_API_KEY
     }
 
     /**
