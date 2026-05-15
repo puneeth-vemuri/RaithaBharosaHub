@@ -52,17 +52,19 @@ com.raithabharosahub
 ## 🚀 Installation and Setup
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/RaithaBharosaHub.git
+   git clone https://github.com/puneeth-vemuri/RaithaBharosaHub.git
    ```
 2. **Open the project** in Android Studio.
 3. **Configure API Keys and Secrets:**
-   Create a `local.properties` file in the root directory (if it doesn't exist) and add your OpenWeatherMap API key and Room database passphrase:
+   Create or open `local.properties` in the root directory and add the following keys:
    ```properties
    OPENWEATHER_API_KEY=your_openweather_api_key_here
    DB_PASSPHRASE=your_secure_db_passphrase_here
+   FIREBASE_WEB_CLIENT_ID=your_firebase_web_client_id_here
    ```
+   > Get `FIREBASE_WEB_CLIENT_ID` from Firebase Console → Project Settings → General → OAuth 2.0 Web client ID.
 4. **Configure Firebase:**
-   Add your `google-services.json` file to the `app/` directory to enable Firebase Authentication and Firestore functionalities.
+   Add your `google-services.json` file to the `app/` directory. Download it from Firebase Console → Project Settings → Your Apps.
 5. **Sync Project:**
    Click "Sync Project with Gradle Files" to fetch all required dependencies.
 
