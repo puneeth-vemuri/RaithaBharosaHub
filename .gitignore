@@ -7,6 +7,18 @@ local.properties
 build/
 .gradle/
 app/build/
+build.log
+build_output.txt
+
+# Logs
+*.log
+logcat_output.txt
+
+# Debug / scratch files
+debug_calc.kt
+
+# Temporary Gradle directory
+.gradle-tmp/
 
 # IDE
 .idea/
@@ -21,30 +33,22 @@ app/build/
 .externalNativeBuild
 .cxx
 
-.gradle-tmp/
+# Roo AI assistant
 .roo/
-*.log
-build_output.txt
-logcat_output.txt
-debug_calc.kt
-ui*.xml
-ui_*.xml
-CLAUDE.md
-DESIGN.md
-.gradle-tmp/
-.roo/
-*.log
-build_output.txt
-logcat_output.txt
-debug_calc.kt
-CLAUDE.md
-DESIGN.md
-ui*.xml
-ui_*.xml
-app/google-services.json
-*.pdf
 
-# Firebase CLI
+# UI dump / prototype files
+ui*.xml
+ui_*.xml
+
+# Firebase
+app/google-services.json
 .firebase/
 firebase-debug.log
 firebase-debug.*.log
+
+# PDF documents
+*.pdf
+
+# CLAUDE & DESIGN docs (local only)
+CLAUDE.md
+DESIGN.md
